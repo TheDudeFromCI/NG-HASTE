@@ -12,10 +12,12 @@ package net.whg.nghaste;
  * effcient as possible. It is backed by a single bye array which stores all of
  * the informaiton about the graph in a semi-compressed format. Whenever
  * information is read from the graph, it is pulled from a specific spot on the
- * byte array to quickly retreive information. This class is immuatble, and all
- * edits preformed on this object simply return a new object instead.
+ * byte array to quickly retreive information. This class is semi-immuatble, and
+ * all edits preformed on this object simply return a new object instead. The
+ * only exception to this rule is the heurisitic value which may be assigned at
+ * any time.
  */
-public class NodeGraph
+public class NodeGraph implements Comparable<NodeGraph>
 {
     /**
      * A small utility function for writing a number to a byte array.
@@ -83,6 +85,7 @@ public class NodeGraph
 
     private final int numSize;
     private final byte[] data;
+    private float heuristic;
 
     /**
      * Creates a new, empty node graph.
@@ -118,10 +121,10 @@ public class NodeGraph
     public NodeGraph addConnection(int outputNode, int outputPlug, int inputNode, int inputPlug)
     {
         if (outputNode < 0 || outputNode >= getNodeCount())
-            throw new IndexOutOfBoundsException(inputNode);
+            throw new IndexOutOfBoundsException("Output node out of bounds: " + outputNode);
 
         if (inputNode < 0 || inputNode >= getNodeCount())
-            throw new IndexOutOfBoundsException(inputNode);
+            throw new IndexOutOfBoundsException("Input node out of bounds: " + inputNode);
 
         NodeGraph graph = new NodeGraph(numSize, data.length + numSize * 4);
 
@@ -157,7 +160,7 @@ public class NodeGraph
     public NodeGraph addConnectionAndNode(int nodeType, int outputPlug, int inputNode, int inputPlug)
     {
         if (inputNode < 0 || inputNode >= getNodeCount())
-            throw new IndexOutOfBoundsException(inputNode);
+            throw new IndexOutOfBoundsException("Input node out of bounds: " + inputNode);
 
         NodeGraph graph = new NodeGraph(numSize, data.length + 5 * numSize);
 
@@ -251,5 +254,32 @@ public class NodeGraph
 
         out.set(readNumber(data, numSize, (off + 0) * numSize), readNumber(data, numSize, (off + 1) * numSize),
                 readNumber(data, numSize, (off + 2) * numSize), readNumber(data, numSize, (off + 3) * numSize));
+    }
+
+    /**
+     * Gets the heuristic score assigned with this NodeGraph.
+     * 
+     * @return The heurisitic score, or 0 if a score has not been assigned.
+     */
+    public float getHeuristicScore()
+    {
+        return heuristic;
+    }
+
+    /**
+     * Assigns the heurisitic score of this NodeGraph.
+     * 
+     * @param heuristic
+     *     - The heurisitic score.
+     */
+    public void setHeuristicScore(float heuristic)
+    {
+        this.heuristic = heuristic;
+    }
+
+    @Override
+    public int compareTo(NodeGraph o)
+    {
+        return -Float.compare(heuristic, o.heuristic);
     }
 }
