@@ -107,4 +107,11 @@ public class NodeGraphTest
         NodeGraph graph = NodeGraph.newGraph(1, 0);
         graph.addConnectionAndNode(5, 0, 5, 0);
     }
+
+    @Test
+    public void create_oneByte_largeValue()
+    {
+        NodeGraph graph = NodeGraph.newGraph(1, 200);
+        assertEquals(200, graph.getNodeType(0));
+    }
 }
