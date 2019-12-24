@@ -14,13 +14,9 @@ public class NodeContainerTest
     public void addElements()
     {
         NodeContainer container = new NodeContainer();
-
-        NodeGraph graph1 = NodeGraph.newGraph(1, 0);
-        NodeGraph graph2 = NodeGraph.newGraph(1, 0);
-        NodeGraph graph3 = NodeGraph.newGraph(1, 0);
-        graph1.setHeuristicScore(1);
-        graph2.setHeuristicScore(-10);
-        graph3.setHeuristicScore(150);
+        NodeGraph graph1 = graph(1);
+        NodeGraph graph2 = graph(-10);
+        NodeGraph graph3 = graph(150);
 
         container.addNodeGraph(graph1);
         container.addNodeGraph(graph2);
@@ -71,9 +67,7 @@ public class NodeContainerTest
         {
             for (int i = 0; i < 10000; i++)
             {
-                NodeGraph graph = NodeGraph.newGraph(1, 0);
-                graph.setHeuristicScore(i);
-                container.addNodeGraph(graph);
+                container.addNodeGraph(graph(i));
 
                 if (i % 2 == 0)
                     if (container.getNodeGraph() == null)
@@ -85,5 +79,56 @@ public class NodeContainerTest
         t.start();
 
         return t;
+    }
+
+    @Test
+    public void sort_1000random()
+    {
+        NodeContainer container = new NodeContainer();
+
+        for (int i = 0; i < 1000; i++)
+            container.addNodeGraph(graph((float) Math.random()));
+
+        container.sort();
+
+        float last = Float.MAX_VALUE;
+        while (container.size() > 0)
+        {
+            NodeGraph graph = container.getNodeGraph();
+            assertTrue(graph.getHeuristicScore() <= last);
+
+            last = graph.getHeuristicScore();
+        }
+    }
+
+    @Test
+    public void update_middleOf10()
+    {
+        NodeContainer container = new NodeContainer();
+
+        for (int i = 0; i < 10; i++)
+            container.addNodeGraph(graph(i));
+
+        NodeGraph g = graph(5);
+        container.addNodeGraph(g);
+
+        g.setHeuristicScore(1.5f);
+        container.update(g);
+
+        float last = Float.MAX_VALUE;
+        while (container.size() > 0)
+        {
+            NodeGraph graph = container.getNodeGraph();
+            assertTrue(graph.getHeuristicScore() <= last);
+
+            last = graph.getHeuristicScore();
+        }
+    }
+
+    private NodeGraph graph(float h)
+    {
+        NodeGraph g = NodeGraph.newGraph(1, 0);
+        g.setHeuristicScore(h);
+        return g;
     }
 }
