@@ -1,18 +1,25 @@
 package net.whg.nghaste;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The node container object is responsible for storing a list of NodeGraphs
- * which are ready to be processed. This class is thread safe.
+ * which are ready to be processed. This container also stores node graph
+ * solutions which are waiting to be collected. This class is thread safe.
  */
 public class NodeContainer
 {
     private final PriorityBlockingQueue<NodeGraph> queue = new PriorityBlockingQueue<>();
+    private final List<NodeGraph> solutions = Collections.synchronizedList(new ArrayList<>());
+    private final AtomicInteger totalGraphs = new AtomicInteger(0);
 
     /**
-     * Adds a new NodeGraph to this node container. The node graph is assumed to
-     * have a heuristic value assigned, and no longer edited after this point.
+     * Adds a new NodeGraph to this node container queue. The node graph is assumed
+     * to have a heuristic value assigned, and no longer edited after this point.
      * 
      * @param graph
      *     - The graph to add.
@@ -31,7 +38,12 @@ public class NodeContainer
      */
     public NodeGraph getNodeGraph()
     {
-        return queue.poll();
+        NodeGraph graph = queue.poll();
+
+        if (graph != null)
+            totalGraphs.incrementAndGet();
+
+        return graph;
     }
 
     /**
@@ -78,12 +90,63 @@ public class NodeContainer
     }
 
     /**
-     * Gets the number of node graphs currently within this container.
+     * Gets the number of node graphs currently within this container queue. This
+     * does not count the number of solutions.
      * 
-     * @return The number of node graphs in this container.
+     * @return The number of non-solution node graphs in this container.
      */
     public int size()
     {
         return queue.size();
+    }
+
+    /**
+     * Gets the number of solutions currently within this container.
+     * 
+     * @return The number of solutions.
+     */
+    public int getSolutionCount()
+    {
+        return solutions.size();
+    }
+
+    /**
+     * Gets the solution at the specified index of this container.
+     * 
+     * @param index
+     *     - The index of the solution.
+     * @return The node graph solution.
+     */
+    public NodeGraph getSolution(int index)
+    {
+        return solutions.get(index);
+    }
+
+    /**
+     * Removes a given solution from this container. Does nothing if solution is
+     * null.
+     * 
+     * @param solution
+     *     - The solution to remove.
+     */
+    public void removeSolution(NodeGraph solution)
+    {
+        if (solution == null)
+            return;
+
+        solutions.remove(solution);
+    }
+
+    /**
+     * This function returns the total number of graphs which have been searched, or
+     * are in the middle of being searched. This value is incremented by one each
+     * time a graph is pulled from the queue for handling. The value does not change
+     * when {@link #getNodeGraph()} returns null.
+     * 
+     * @return The total number of graphs which have been searched.
+     */
+    public int getTotalGraphsSearched()
+    {
+        return totalGraphs.get();
     }
 }
