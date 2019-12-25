@@ -40,8 +40,7 @@ public class NGHasteAlgorithm
     private void initialize()
     {
         int nodeType = environment.getIndexOf(environment.getOutputFunction());
-        int numSize = environment.getMinByteCount();
-        NodeGraph graph = NodeGraph.newGraph(numSize, nodeType);
+        NodeGraph graph = NodeGraph.newGraph(environment, nodeType);
         container.addNodeGraph(graph);
     }
 

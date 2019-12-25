@@ -1,16 +1,34 @@
 package net.whg.nghaste.unit;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import java.util.ArrayList;
 import org.junit.Test;
 import net.whg.nghaste.Connection;
+import net.whg.nghaste.Environment;
+import net.whg.nghaste.IDataType;
+import net.whg.nghaste.IFunction;
 import net.whg.nghaste.NodeGraph;
 
 public class NodeGraphTest
 {
+    private NodeGraph graph(int bytes, int nodeType)
+    {
+        IFunction func = mock(IFunction.class);
+        when(func.getInputs()).thenReturn(new IDataType[0]);
+        when(func.getOutputs()).thenReturn(new IDataType[0]);
+
+        Environment env = new Environment(new ArrayList<>(), func, 1 << (bytes * 7));
+
+        NodeGraph g = NodeGraph.newGraph(env, nodeType);
+        return g;
+    }
+
     @Test
     public void create()
     {
-        NodeGraph graph = NodeGraph.newGraph(4, 27);
+        NodeGraph graph = graph(4, 27);
 
         assertEquals(1, graph.getNodeCount());
         assertEquals(0, graph.getConnectionCount());
@@ -21,7 +39,7 @@ public class NodeGraphTest
     @Test
     public void create_connectionAddNode()
     {
-        NodeGraph graph = NodeGraph.newGraph(2, 42);
+        NodeGraph graph = graph(2, 42);
         graph = graph.addConnectionAndNode(18, 0, 0, 2);
 
         assertEquals(2, graph.getNodeCount());
@@ -41,7 +59,7 @@ public class NodeGraphTest
     @Test
     public void create_connectionAddNode_2deep()
     {
-        NodeGraph graph = NodeGraph.newGraph(1, 5);
+        NodeGraph graph = graph(1, 5);
         graph = graph.addConnectionAndNode(7, 0, 0, 2);
         graph = graph.addConnectionAndNode(9, 0, 1, 1);
 
@@ -70,7 +88,7 @@ public class NodeGraphTest
     @Test
     public void create_connection()
     {
-        NodeGraph graph = NodeGraph.newGraph(4, 5);
+        NodeGraph graph = graph(4, 5);
         graph = graph.addConnectionAndNode(4, 13, 0, 12);
         graph = graph.addConnectionAndNode(19, 3, 1, 8);
         graph = graph.addConnection(2, 19, 0, 1);
@@ -90,28 +108,28 @@ public class NodeGraphTest
     @Test(expected = IndexOutOfBoundsException.class)
     public void create_connection_outputNode_outOfBounds()
     {
-        NodeGraph graph = NodeGraph.newGraph(1, 0);
+        NodeGraph graph = graph(1, 0);
         graph.addConnection(-1, 0, 0, 0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void create_connection_inputNode_outOfBounds()
     {
-        NodeGraph graph = NodeGraph.newGraph(1, 0);
+        NodeGraph graph = graph(1, 0);
         graph.addConnection(0, 0, -1, 0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void create_connectionAndNode_inputNode_outOfBounds()
     {
-        NodeGraph graph = NodeGraph.newGraph(1, 0);
+        NodeGraph graph = graph(1, 0);
         graph.addConnectionAndNode(5, 0, 5, 0);
     }
 
     @Test
     public void create_oneByte_largeValue()
     {
-        NodeGraph graph = NodeGraph.newGraph(1, 200);
+        NodeGraph graph = graph(1, 200);
         assertEquals(200, graph.getNodeType(0));
     }
 }

@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import org.junit.Rule;
 import org.junit.Test;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
@@ -100,10 +100,9 @@ public class SearchTreeTest
         List<IFunction> functions = buildFunctionList();
         Environment env = new Environment(functions, functions.get(0), 5);
         NodeContainer container = new NodeContainer();
-        NodeGraph graph = NodeGraph.newGraph(1, 0);
         SearchTree tree = new SearchTree(env);
 
-        tree.placeNeighbors(container, graph);
+        tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
 
         assertEquals(8, container.size());
 
@@ -114,6 +113,44 @@ public class SearchTreeTest
             assertEquals(1, g.getConnectionCount());
             assertEquals(0, g.getNodeType(0));
             assertNotEquals(0, g.getNodeType(1));
+        }
+    }
+
+    @Test
+    public void search2_2Layers()
+    {
+        List<IFunction> functions = buildFunctionList();
+        Environment env = new Environment(functions, functions.get(0), 5);
+        NodeContainer container = new NodeContainer();
+        SearchTree tree = new SearchTree(env);
+
+        tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
+
+        List<NodeGraph> outputs = new ArrayList<>();
+        for (int i = 0; i < 8; i++)
+            outputs.add(container.getNodeGraph());
+
+        for (int i = 0; i < 8; i++)
+            tree.placeNeighbors(container, outputs.get(i));
+
+        assertEquals(49, container.size());
+    }
+
+    @Test(timeout = 3000)
+    public void maxDepth()
+    {
+        List<IFunction> functions = buildFunctionList();
+        Environment env = new Environment(functions, functions.get(0), 3);
+        NodeContainer container = new NodeContainer();
+        SearchTree tree = new SearchTree(env);
+
+        container.addNodeGraph(NodeGraph.newGraph(env, 0));
+        while (container.size() > 0)
+        {
+            NodeGraph g = container.getNodeGraph();
+            assertTrue(g.getConnectionCount() <= 3);
+
+            tree.placeNeighbors(container, g);
         }
     }
 }

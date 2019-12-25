@@ -4,7 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import java.util.ArrayList;
 import org.junit.Test;
+import net.whg.nghaste.Environment;
+import net.whg.nghaste.IDataType;
+import net.whg.nghaste.IFunction;
 import net.whg.nghaste.NodeContainer;
 import net.whg.nghaste.NodeGraph;
 
@@ -127,7 +133,13 @@ public class NodeContainerTest
 
     private NodeGraph graph(float h)
     {
-        NodeGraph g = NodeGraph.newGraph(1, 0);
+        IFunction func = mock(IFunction.class);
+        when(func.getInputs()).thenReturn(new IDataType[0]);
+        when(func.getOutputs()).thenReturn(new IDataType[0]);
+
+        Environment env = new Environment(new ArrayList<>(), func, 3);
+
+        NodeGraph g = NodeGraph.newGraph(env, 0);
         g.setHeuristicScore(h);
         return g;
     }

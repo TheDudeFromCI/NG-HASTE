@@ -20,69 +20,27 @@ package net.whg.nghaste;
 public class NodeGraph implements Comparable<NodeGraph>
 {
     /**
-     * A small utility function for writing a number to a byte array.
-     * 
-     * @param bytes
-     *     - The byte array.
-     * @param numSize
-     *     - The number of bytes in each number.
-     * @param pos
-     *     - The byte position to write to.
-     * @param value
-     *     - The value to write.
-     */
-    private static void writeNumber(byte[] bytes, int numSize, int pos, int value)
-    {
-        for (int i = numSize - 1; i >= 0; i--)
-            bytes[pos++] = (byte) ((value >> (i * 8)) & 0xFF);
-    }
-
-    /**
-     * A small utility function for reading a number from a byte array.
-     * 
-     * @param bytes
-     *     - The byte array.
-     * @param numSize
-     *     - The number of bytes in each number.
-     * @param pos
-     *     - The byte position to read from.
-     * @return The value at the given position.
-     */
-    private static int readNumber(byte[] bytes, int numSize, int pos)
-    {
-        int value = 0;
-
-        for (int i = numSize - 1; i >= 0; i--)
-            value |= (bytes[pos++] & 0xFF) << i * 8;
-
-        return value;
-    }
-
-    /**
      * Creates a new node graph containing a single node, the output node.
      * 
-     * @param numSize
-     *     - The number of bytes to use when reading or writing to the byte array.
-     *     Maybe be either 1, 2, or 4 bytes per value.
+     * @param environment
+     *     - The environment this node graph exists within.
      * @param nodeType
      *     - The type of node to use as the output node.
      * @return The newly created node graph.
      * @throws IllegalArgumentException
      *     If the numSize is not a value of 1, 2, or 4.
      */
-    public static NodeGraph newGraph(int numSize, int nodeType)
+    public static NodeGraph newGraph(Environment environment, int nodeType)
     {
-        if (numSize != 1 && numSize != 2 && numSize != 4)
-            throw new IllegalArgumentException("Unsupported byte size: " + numSize);
+        NodeGraph graph = new NodeGraph(environment, environment.getMinByteCount() * 2);
 
-        NodeGraph graph = new NodeGraph(numSize, 2 * numSize);
-
-        writeNumber(graph.data, numSize, 0, 1);
-        writeNumber(graph.data, numSize, numSize, nodeType);
+        graph.writeNumber(0, 1);
+        graph.writeNumber(1, nodeType);
 
         return graph;
     }
 
+    private final Environment environment;
     private final int numSize;
     private final byte[] data;
     private float heuristic;
@@ -90,14 +48,15 @@ public class NodeGraph implements Comparable<NodeGraph>
     /**
      * Creates a new, empty node graph.
      * 
-     * @param numSize
-     *     - The number of bytes per value.
+     * @param environment
+     *     - The environment this node graph exists within.
      * @param buffer
      *     - The size of the byte array.
      */
-    private NodeGraph(int numSize, int buffer)
+    private NodeGraph(Environment environment, int buffer)
     {
-        this.numSize = numSize;
+        this.environment = environment;
+        this.numSize = environment.getMinByteCount();
         data = new byte[buffer];
     }
 
@@ -126,15 +85,16 @@ public class NodeGraph implements Comparable<NodeGraph>
         if (inputNode < 0 || inputNode >= getNodeCount())
             throw new IndexOutOfBoundsException("Input node out of bounds: " + inputNode);
 
-        NodeGraph graph = new NodeGraph(numSize, data.length + numSize * 4);
+        NodeGraph graph = new NodeGraph(environment, data.length + numSize * 4);
 
         for (int i = 0; i < data.length; i++)
             graph.data[i] = data[i];
 
-        writeNumber(graph.data, numSize, data.length, outputNode);
-        writeNumber(graph.data, numSize, data.length + numSize, outputPlug);
-        writeNumber(graph.data, numSize, data.length + numSize * 2, inputNode);
-        writeNumber(graph.data, numSize, data.length + numSize * 3, inputPlug);
+        int off = data.length / numSize;
+        graph.writeNumber(off++, outputNode);
+        graph.writeNumber(off++, outputPlug);
+        graph.writeNumber(off++, inputNode);
+        graph.writeNumber(off++, inputPlug);
 
         return graph;
     }
@@ -162,25 +122,25 @@ public class NodeGraph implements Comparable<NodeGraph>
         if (inputNode < 0 || inputNode >= getNodeCount())
             throw new IndexOutOfBoundsException("Input node out of bounds: " + inputNode);
 
-        NodeGraph graph = new NodeGraph(numSize, data.length + 5 * numSize);
+        NodeGraph graph = new NodeGraph(environment, data.length + 5 * numSize);
 
         int nodeCount = getNodeCount();
         int connCount = getConnectionCount();
         int j = 0;
 
-        writeNumber(graph.data, numSize, j++ * numSize, nodeCount + 1);
+        graph.writeNumber(j++, nodeCount + 1);
 
         for (int i = 0; i < nodeCount; i++)
-            writeNumber(graph.data, numSize, j++ * numSize, getNodeType(i));
-        writeNumber(graph.data, numSize, j++ * numSize, nodeType);
+            graph.writeNumber(j++, getNodeType(i));
+        graph.writeNumber(j++, nodeType);
 
         for (int i = 0; i < connCount * 4; i++)
-            writeNumber(graph.data, numSize, j++ * numSize, readNumber(data, numSize, (nodeCount + 1 + i) * numSize));
+            graph.writeNumber(j++, readNumber(nodeCount + 1 + i));
 
-        writeNumber(graph.data, numSize, j++ * numSize, nodeCount);
-        writeNumber(graph.data, numSize, j++ * numSize, outputPlug);
-        writeNumber(graph.data, numSize, j++ * numSize, inputNode);
-        writeNumber(graph.data, numSize, j++ * numSize, inputPlug);
+        graph.writeNumber(j++, nodeCount);
+        graph.writeNumber(j++, outputPlug);
+        graph.writeNumber(j++, inputNode);
+        graph.writeNumber(j++, inputPlug);
 
         return graph;
     }
@@ -202,7 +162,7 @@ public class NodeGraph implements Comparable<NodeGraph>
      */
     public int getNodeCount()
     {
-        return readNumber(data, numSize, 0);
+        return readNumber(0);
     }
 
     /**
@@ -219,7 +179,7 @@ public class NodeGraph implements Comparable<NodeGraph>
         if (node < 0 || node >= getNodeCount())
             throw new ArrayIndexOutOfBoundsException(node);
 
-        return readNumber(data, numSize, (node + 1) * numSize);
+        return readNumber(node + 1);
     }
 
     /**
@@ -252,8 +212,7 @@ public class NodeGraph implements Comparable<NodeGraph>
         int nodeCount = getNodeCount();
         int off = nodeCount + 1 + index * 4;
 
-        out.set(readNumber(data, numSize, (off + 0) * numSize), readNumber(data, numSize, (off + 1) * numSize),
-                readNumber(data, numSize, (off + 2) * numSize), readNumber(data, numSize, (off + 3) * numSize));
+        out.set(readNumber(off + 0), readNumber(off + 1), readNumber(off + 2), readNumber(off + 3));
     }
 
     /**
@@ -282,4 +241,57 @@ public class NodeGraph implements Comparable<NodeGraph>
     {
         return -Float.compare(heuristic, o.heuristic);
     }
+
+    /**
+     * Counts the number of open input nodes in this graph.
+     * 
+     * @return The number of open input plugs.
+     */
+    public int countOpenPlugs()
+    {
+        int openPlugs = -getConnectionCount();
+
+        int nodeCount = getNodeCount();
+        for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
+        {
+            IFunction nodeType = environment.getFunctionAt(getNodeType(nodeIndex));
+            openPlugs += nodeType.getInputs().length;
+        }
+
+        return openPlugs;
+    }
+
+    /**
+     * A small utility function for writing a number to a byte array.
+     * 
+     * @param pos
+     *     - The byte position to write to.
+     * @param value
+     *     - The value to write.
+     */
+    private void writeNumber(int pos, int value)
+    {
+        pos *= numSize;
+        for (int i = numSize - 1; i >= 0; i--)
+            data[pos++] = (byte) ((value >> (i * 8)) & 0xFF);
+    }
+
+    /**
+     * A small utility function for reading a number from a byte array.
+     * 
+     * @param pos
+     *     - The byte position to read from.
+     * @return The value at the given position.
+     */
+    private int readNumber(int pos)
+    {
+        int value = 0;
+
+        pos *= numSize;
+        for (int i = numSize - 1; i >= 0; i--)
+            value |= (data[pos++] & 0xFF) << i * 8;
+
+        return value;
+    }
+
 }

@@ -156,4 +156,18 @@ public final class Environment
 
         return 1;
     }
+
+    /**
+     * Gets the maximum depth that a solution can be. The depth of a solution is
+     * measured by the number of connections in that graph, where one new connection
+     * is added per level. This value is used to prevent solutions from scaling to
+     * infinity in complexity. This can also be used to prune solutions early if the
+     * number of open plugs plus the number of connections exceeds this value.
+     * 
+     * @return The maximum depth of a solution.
+     */
+    public int getMaxDepth()
+    {
+        return nDepth;
+    }
 }

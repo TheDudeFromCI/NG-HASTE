@@ -76,6 +76,9 @@ public class SearchTree
 
     private void processGraph(NodeContainer container, NodeGraph graph)
     {
+        if (graph.getConnectionCount() + graph.countOpenPlugs() > environment.getMaxDepth())
+            return;
+
         // TODO Check graph for duplicates
         // TODO Cull graph which breaks axioms
         // TODO Calculate graph heuristics
