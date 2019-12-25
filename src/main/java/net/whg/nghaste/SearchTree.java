@@ -76,14 +76,20 @@ public class SearchTree
 
     private void processGraph(NodeContainer container, NodeGraph graph)
     {
-        if (graph.getConnectionCount() + graph.countOpenPlugs() > environment.getMaxDepth())
+        int connectionCount = graph.getConnectionCount();
+        int openPlugs = graph.countOpenPlugs();
+
+        if (connectionCount + openPlugs > environment.getMaxDepth())
             return;
 
         // TODO Check graph for duplicates
         // TODO Cull graph which breaks axioms
         // TODO Calculate graph heuristics
 
-        container.addNodeGraph(graph);
+        if (openPlugs == 0)
+            container.addSolution(graph);
+        else
+            container.addNodeGraph(graph);
     }
 
     private boolean isParentOf(NodeGraph graph, int parentNode, int childNode)

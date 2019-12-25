@@ -138,6 +138,17 @@ public class NodeContainer
     }
 
     /**
+     * Adds a new solution to this node container.
+     * 
+     * @param solution
+     *     - The solution to add.
+     */
+    void addSolution(NodeGraph solution)
+    {
+        solutions.add(solution);
+    }
+
+    /**
      * This function returns the total number of graphs which have been searched, or
      * are in the middle of being searched. This value is incremented by one each
      * time a graph is pulled from the queue for handling. The value does not change

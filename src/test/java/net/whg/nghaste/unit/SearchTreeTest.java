@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Rule;
 import org.junit.Test;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
@@ -104,9 +103,10 @@ public class SearchTreeTest
 
         tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
 
-        assertEquals(8, container.size());
+        assertEquals(7, container.size());
+        assertEquals(1, container.getSolutionCount());
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 7; i++)
         {
             NodeGraph g = container.getNodeGraph();
             assertEquals(2, g.getNodeCount());
@@ -127,13 +127,13 @@ public class SearchTreeTest
         tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
 
         List<NodeGraph> outputs = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 7; i++)
             outputs.add(container.getNodeGraph());
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 7; i++)
             tree.placeNeighbors(container, outputs.get(i));
 
-        assertEquals(49, container.size());
+        assertEquals(43, container.size());
     }
 
     @Test(timeout = 3000)
@@ -148,9 +148,32 @@ public class SearchTreeTest
         while (container.size() > 0)
         {
             NodeGraph g = container.getNodeGraph();
-            assertTrue(g.getConnectionCount() <= 3);
+            assertTrue(g.getConnectionCount() + g.countOpenPlugs() <= 3);
 
             tree.placeNeighbors(container, g);
         }
+    }
+
+    @Test(timeout = 3000)
+    public void publishSolution()
+    {
+        List<IFunction> functions = buildFunctionList();
+        Environment env = new Environment(functions, functions.get(0), 3);
+        NodeContainer container = new NodeContainer();
+        SearchTree tree = new SearchTree(env);
+
+        container.addNodeGraph(NodeGraph.newGraph(env, 0));
+        while (container.size() > 0)
+        {
+            NodeGraph g = container.getNodeGraph();
+            tree.placeNeighbors(container, g);
+        }
+
+        int solCount = container.getSolutionCount();
+        assertTrue(solCount > 0);
+
+        for (int i = 0; i < solCount; i++)
+            assertEquals(0, container.getSolution(i)
+                                     .countOpenPlugs());
     }
 }
