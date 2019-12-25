@@ -24,10 +24,10 @@ class Worker extends Thread
      *     - The container to pull node graphs out of and store new node graphs
      *     into.
      */
-    Worker(NodeContainer container, SearchTree searchTree)
+    Worker(NodeContainer container, Environment environment)
     {
         this.container = container;
-        this.searchTree = searchTree;
+        this.searchTree = new SearchTree(environment);
 
         setDaemon(true);
         start();

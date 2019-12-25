@@ -17,7 +17,6 @@ public class NGHasteAlgorithm
 {
     private final NodeContainer container = new NodeContainer();
     private final List<Worker> workers = new ArrayList<>();
-    private final SearchTree searchTree;
     private final Environment environment;
 
     /**
@@ -30,7 +29,6 @@ public class NGHasteAlgorithm
     public NGHasteAlgorithm(Environment environment)
     {
         this.environment = environment;
-        searchTree = new SearchTree(environment);
 
         initialize();
     }
@@ -69,7 +67,7 @@ public class NGHasteAlgorithm
     public void startWorkers(int workers)
     {
         for (int i = 0; i < workers; i++)
-            this.workers.add(new Worker(container, searchTree));
+            this.workers.add(new Worker(container, environment));
     }
 
     /**
