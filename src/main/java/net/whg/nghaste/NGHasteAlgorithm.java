@@ -66,7 +66,7 @@ public class NGHasteAlgorithm
     public void startWorkers(int workers)
     {
         for (int i = 0; i < workers; i++)
-            this.workers.add(new Worker(container, environment));
+            this.workers.add(new Worker(container));
     }
 
     /**

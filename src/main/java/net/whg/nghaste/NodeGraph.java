@@ -256,10 +256,7 @@ public class NodeGraph implements Comparable<NodeGraph>
         if (!Arrays.equals(data, g.data))
             return false;
 
-        if (Math.abs(heuristic - g.heuristic) > 0.0000001)
-            return false;
-
-        return true;
+        return Math.abs(heuristic - g.heuristic) <= 0.0000001;
     }
 
     @Override
