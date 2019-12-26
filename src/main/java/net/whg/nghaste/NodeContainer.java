@@ -81,11 +81,8 @@ public class NodeContainer
     {
         synchronized (queue)
         {
-            if (queue.contains(graph))
-            {
-                queue.remove(graph);
+            if (queue.remove(graph))
                 queue.add(graph);
-            }
         }
     }
 

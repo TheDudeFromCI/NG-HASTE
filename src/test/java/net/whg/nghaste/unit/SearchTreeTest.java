@@ -99,9 +99,9 @@ public class SearchTreeTest
         List<IFunction> functions = buildFunctionList();
         Environment env = new Environment(functions, functions.get(0), 5);
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(env);
+        SearchTree tree = new SearchTree(container);
 
-        tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
+        tree.placeNeighbors(NodeGraph.newGraph(env, 0));
 
         assertEquals(7, container.size());
         assertEquals(1, container.getSolutionCount());
@@ -122,16 +122,16 @@ public class SearchTreeTest
         List<IFunction> functions = buildFunctionList();
         Environment env = new Environment(functions, functions.get(0), 5);
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(env);
+        SearchTree tree = new SearchTree(container);
 
-        tree.placeNeighbors(container, NodeGraph.newGraph(env, 0));
+        tree.placeNeighbors(NodeGraph.newGraph(env, 0));
 
         List<NodeGraph> outputs = new ArrayList<>();
         for (int i = 0; i < 7; i++)
             outputs.add(container.getNodeGraph());
 
         for (int i = 0; i < 7; i++)
-            tree.placeNeighbors(container, outputs.get(i));
+            tree.placeNeighbors(outputs.get(i));
 
         assertEquals(43, container.size());
     }
@@ -142,7 +142,7 @@ public class SearchTreeTest
         List<IFunction> functions = buildFunctionList();
         Environment env = new Environment(functions, functions.get(0), 3);
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(env);
+        SearchTree tree = new SearchTree(container);
 
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
         while (container.size() > 0)
@@ -150,7 +150,7 @@ public class SearchTreeTest
             NodeGraph g = container.getNodeGraph();
             assertTrue(g.getConnectionCount() + g.countOpenPlugs() <= 3);
 
-            tree.placeNeighbors(container, g);
+            tree.placeNeighbors(g);
         }
     }
 
@@ -160,13 +160,13 @@ public class SearchTreeTest
         List<IFunction> functions = buildFunctionList();
         Environment env = new Environment(functions, functions.get(0), 3);
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(env);
+        SearchTree tree = new SearchTree(container);
 
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
         while (container.size() > 0)
         {
             NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(container, g);
+            tree.placeNeighbors(g);
         }
 
         int solCount = container.getSolutionCount();

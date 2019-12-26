@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import java.util.Arrays;
+
 /**
  * A NodeGraph is a collection of nodes, each containing a set of inputs and
  * outputs, where multiple nodes are connected together, output-to-input, to
@@ -87,14 +89,13 @@ public class NodeGraph implements Comparable<NodeGraph>
 
         NodeGraph graph = new NodeGraph(environment, data.length + numSize * 4);
 
-        for (int i = 0; i < data.length; i++)
-            graph.data[i] = data[i];
+        System.arraycopy(data, 0, graph.data, 0, data.length);
 
         int off = data.length / numSize;
         graph.writeNumber(off++, outputNode);
         graph.writeNumber(off++, outputPlug);
         graph.writeNumber(off++, inputNode);
-        graph.writeNumber(off++, inputPlug);
+        graph.writeNumber(off, inputPlug);
 
         return graph;
     }
@@ -140,7 +141,7 @@ public class NodeGraph implements Comparable<NodeGraph>
         graph.writeNumber(j++, nodeCount);
         graph.writeNumber(j++, outputPlug);
         graph.writeNumber(j++, inputNode);
-        graph.writeNumber(j++, inputPlug);
+        graph.writeNumber(j, inputPlug);
 
         return graph;
     }
@@ -242,6 +243,31 @@ public class NodeGraph implements Comparable<NodeGraph>
         return -Float.compare(heuristic, o.heuristic);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof NodeGraph))
+            return false;
+
+        NodeGraph g = (NodeGraph) o;
+        if (!Arrays.equals(data, g.data))
+            return false;
+
+        if (Math.abs(heuristic - g.heuristic) > 0.0000001)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Arrays.hashCode(data);
+    }
+
     /**
      * Counts the number of open input nodes in this graph.
      * 
@@ -294,4 +320,27 @@ public class NodeGraph implements Comparable<NodeGraph>
         return value;
     }
 
+    /**
+     * Gets the function which belongs to the node at the specified index.
+     * 
+     * @param index
+     *     - The index of the node.
+     * @return The function which belongs to the node at given index.
+     * @throws ArrayIndexOutOfBoundsException
+     *     If the index points to a node which does not exist.
+     */
+    public IFunction getNodeAsFunction(int index)
+    {
+        return environment.getFunctionAt(getNodeType(index));
+    }
+
+    /**
+     * Gets the environment object being used by this node graph.
+     * 
+     * @return The environment.
+     */
+    public Environment getEnvironment()
+    {
+        return environment;
+    }
 }

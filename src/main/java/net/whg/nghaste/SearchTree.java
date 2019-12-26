@@ -8,68 +8,98 @@ package net.whg.nghaste;
 public class SearchTree
 {
     private final Connection connectionBuf = new Connection();
-    private final Environment environment;
+    private final NodeContainer container;
 
-    public SearchTree(Environment environment)
+    /**
+     * Creates a new search tree object.
+     * 
+     * @param container
+     *     - The container to store new graphs to.
+     */
+    public SearchTree(NodeContainer container)
     {
-        this.environment = environment;
+        this.container = container;
     }
 
-    public void placeNeighbors(NodeContainer container, NodeGraph graph)
+    public void placeNeighbors(NodeGraph graph)
     {
         int nodeCount = graph.getNodeCount();
         for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
         {
-            IFunction nodeType = environment.getFunctionAt(graph.getNodeType(nodeIndex));
-            IDataType[] nodeInputs = nodeType.getInputs();
-            int inputPlugs = nodeInputs.length;
+            IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
+            int inputPlugs = nodeType.getInputs().length;
 
-            plugChecker:
             for (int inputPlugIndex = 0; inputPlugIndex < inputPlugs; inputPlugIndex++)
             {
-                int connectionCount = graph.getConnectionCount();
-                for (int connectionIndex = 0; connectionIndex < connectionCount; connectionIndex++)
-                {
-                    graph.getConnection(connectionIndex, connectionBuf);
+                if (hasConnection(graph, nodeIndex, inputPlugIndex))
+                    continue;
 
-                    if (connectionBuf.getInputNode() == nodeIndex && connectionBuf.getInputPlug() == inputPlugIndex)
-                        continue plugChecker;
-                }
+                addNewConnections(graph, nodeIndex, inputPlugIndex);
+                addNewNodes(graph, nodeIndex, inputPlugIndex);
+            }
+        }
+    }
 
-                for (int parentNodeIndex = 0; parentNodeIndex < nodeCount; parentNodeIndex++)
-                {
-                    if (isParentOf(graph, nodeIndex, parentNodeIndex))
-                        continue;
+    private boolean hasConnection(NodeGraph graph, int nodeIndex, int inputPlugIndex)
+    {
+        int connectionCount = graph.getConnectionCount();
+        for (int connectionIndex = 0; connectionIndex < connectionCount; connectionIndex++)
+        {
+            graph.getConnection(connectionIndex, connectionBuf);
 
-                    IFunction parentNodeType = environment.getFunctionAt(graph.getNodeType(parentNodeIndex));
-                    IDataType[] parentOutputs = parentNodeType.getOutputs();
+            if (connectionBuf.getInputNode() == nodeIndex && connectionBuf.getInputPlug() == inputPlugIndex)
+                return true;
+        }
 
-                    int parentOutputCount = parentOutputs.length;
-                    for (int parentOutputIndex = 0; parentOutputIndex < parentOutputCount; parentOutputIndex++)
-                    {
-                        if (!parentOutputs[parentOutputIndex].equals(nodeInputs[inputPlugIndex]))
-                            continue;
+        return false;
+    }
 
-                        processGraph(container,
-                                graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex));
-                    }
-                }
+    private void addNewConnections(NodeGraph graph, int nodeIndex, int inputPlugIndex)
+    {
+        IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
+        IDataType[] nodeInputs = nodeType.getInputs();
+        int nodeCount = graph.getNodeCount();
 
-                int functionCount = environment.getFunctionCount();
-                for (int functionIndex = 0; functionIndex < functionCount; functionIndex++)
-                {
-                    IDataType[] functionOutputs = environment.getFunctionAt(functionIndex)
-                                                             .getOutputs();
-                    int functionOutputCount = functionOutputs.length;
-                    for (int functionOutputIndex = 0; functionOutputIndex < functionOutputCount; functionOutputIndex++)
-                    {
-                        if (!functionOutputs[functionOutputIndex].equals(nodeInputs[inputPlugIndex]))
-                            continue;
+        for (int parentNodeIndex = 0; parentNodeIndex < nodeCount; parentNodeIndex++)
+        {
+            if (isParentOf(graph, nodeIndex, parentNodeIndex))
+                continue;
 
-                        processGraph(container, graph.addConnectionAndNode(functionIndex, functionOutputIndex,
-                                nodeIndex, inputPlugIndex));
-                    }
-                }
+            IFunction parentNodeType = graph.getNodeAsFunction(parentNodeIndex);
+            IDataType[] parentOutputs = parentNodeType.getOutputs();
+
+            int parentOutputCount = parentOutputs.length;
+            for (int parentOutputIndex = 0; parentOutputIndex < parentOutputCount; parentOutputIndex++)
+            {
+                if (!parentOutputs[parentOutputIndex].equals(nodeInputs[inputPlugIndex]))
+                    continue;
+
+                processGraph(container,
+                        graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex));
+            }
+        }
+    }
+
+    private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex)
+    {
+        IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
+        IDataType[] nodeInputs = nodeType.getInputs();
+
+        int functionCount = graph.getEnvironment()
+                                 .getFunctionCount();
+        for (int functionIndex = 0; functionIndex < functionCount; functionIndex++)
+        {
+            IDataType[] functionOutputs = graph.getEnvironment()
+                                               .getFunctionAt(functionIndex)
+                                               .getOutputs();
+            int functionOutputCount = functionOutputs.length;
+            for (int functionOutputIndex = 0; functionOutputIndex < functionOutputCount; functionOutputIndex++)
+            {
+                if (!functionOutputs[functionOutputIndex].equals(nodeInputs[inputPlugIndex]))
+                    continue;
+
+                processGraph(container,
+                        graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex));
             }
         }
     }
@@ -79,7 +109,8 @@ public class SearchTree
         int connectionCount = graph.getConnectionCount();
         int openPlugs = graph.countOpenPlugs();
 
-        if (connectionCount + openPlugs > environment.getMaxDepth())
+        if (connectionCount + openPlugs > graph.getEnvironment()
+                                               .getMaxDepth())
             return;
 
         // TODO Check graph for duplicates
@@ -102,11 +133,9 @@ public class SearchTree
         {
             graph.getConnection(connectionIndex, connectionBuf);
 
-            if (connectionBuf.getOutputNode() == parentNode)
-            {
-                if (isParentOf(graph, connectionBuf.getInputNode(), childNode))
-                    return true;
-            }
+            if (connectionBuf.getOutputNode() == parentNode
+                    && isParentOf(graph, connectionBuf.getInputNode(), childNode))
+                return true;
         }
 
         return false;

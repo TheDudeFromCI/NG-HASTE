@@ -27,7 +27,7 @@ class Worker extends Thread
     Worker(NodeContainer container, Environment environment)
     {
         this.container = container;
-        this.searchTree = new SearchTree(environment);
+        this.searchTree = new SearchTree(container);
 
         setDaemon(true);
         start();
@@ -75,7 +75,7 @@ class Worker extends Thread
                 continue;
             }
 
-            searchTree.placeNeighbors(container, graph);
+            searchTree.placeNeighbors(graph);
         }
     }
 }
