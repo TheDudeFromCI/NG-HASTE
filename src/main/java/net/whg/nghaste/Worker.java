@@ -14,7 +14,6 @@ class Worker extends Thread
     private static final Logger logger = LoggerFactory.getLogger(Worker.class);
 
     private final NodeContainer container;
-    private final SearchTree searchTree;
     private boolean running = true;
 
     /**
@@ -27,7 +26,6 @@ class Worker extends Thread
     Worker(NodeContainer container)
     {
         this.container = container;
-        this.searchTree = new SearchTree(container);
 
         setDaemon(true);
         start();
@@ -56,6 +54,8 @@ class Worker extends Thread
     @Override
     public void run()
     {
+        SearchTree searchTree = new SearchTree(container);
+
         while (running)
         {
             NodeGraph graph = container.getNodeGraph();
