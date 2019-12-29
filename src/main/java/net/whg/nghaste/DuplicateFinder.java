@@ -2,8 +2,6 @@ package net.whg.nghaste;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.thavam.util.concurrent.blockingMap.BlockingHashMap;
-import org.thavam.util.concurrent.blockingMap.BlockingMap;
 
 /**
  * The duplicate finder class is a utility class designed to work alongside the
@@ -16,7 +14,6 @@ import org.thavam.util.concurrent.blockingMap.BlockingMap;
  */
 public class DuplicateFinder
 {
-    // private BlockingMap<GraphHash, Integer> duplicates = new BlockingHashMap<>();
     private Map<GraphHash, Integer> duplicates = new HashMap<>();
 
     /**

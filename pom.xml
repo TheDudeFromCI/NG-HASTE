@@ -51,12 +51,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.29</version>
         </dependency>
-
-    <dependency>
-        <groupId>com.github.sarveswaran-m</groupId>
-        <artifactId>util.concurrent.blockingMap</artifactId>
-        <version>0.91</version>
-    </dependency>
     </dependencies>
 
     <build>

@@ -2,7 +2,6 @@ package net.whg.nghaste;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The NG-HASTE algorithm is a logic-based probleming solving algorithm. The

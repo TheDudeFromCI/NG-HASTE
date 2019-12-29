@@ -36,15 +36,18 @@ public class Algorithm1Test
     @Test
     public void test_multithreaded()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment environment = new Environment(functions, functions.get(0), 3);
-        NGHasteAlgorithm algorithm = new NGHasteAlgorithm(environment);
+        for (int i = 0; i < 25; i++)
+        {
+            List<IFunction> functions = EnvironmentUtils.buildFunctionList();
+            Environment environment = new Environment(functions, functions.get(0), 3);
+            NGHasteAlgorithm algorithm = new NGHasteAlgorithm(environment);
 
-        algorithm.startWorkers(3);
-        await().atMost(13, TimeUnit.SECONDS)
-               .until(() -> algorithm.getRemainingGraphs() == 0);
-        algorithm.disposeWorkers();
+            algorithm.startWorkers(3);
+            await().atMost(13, TimeUnit.SECONDS)
+                   .until(() -> algorithm.getRemainingGraphs() == 0);
+            algorithm.disposeWorkers();
 
-        assertEquals(31, algorithm.getSolutionCount());
+            assertEquals(31, algorithm.getSolutionCount());
+        }
     }
 }
