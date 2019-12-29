@@ -2,6 +2,7 @@ package net.whg.nghaste.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.EnvironmentBuilder;
 import net.whg.nghaste.IDataType;
@@ -75,12 +76,19 @@ public class EnvironmentUtils
 
     public static Environment quickEnvironment(int size)
     {
+        return quickEnvironment(size, builder ->
+        {});
+    }
+
+    public static Environment quickEnvironment(int size, Consumer<EnvironmentBuilder> additonalActions)
+    {
         List<IFunction> functions = buildFunctionList();
 
         EnvironmentBuilder builder = new EnvironmentBuilder().setMaxDepth(size);
         for (IFunction function : functions)
             builder.addFunction(function);
 
+        additonalActions.accept(builder);
         return builder.build();
     }
 
