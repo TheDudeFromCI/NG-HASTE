@@ -3,7 +3,6 @@ package net.whg.nghaste.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mockingDetails;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -20,8 +19,7 @@ public class SearchTreeTest
     @Test
     public void search1_onlyOutput()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment env = new Environment(functions, functions.get(0), 5);
+        Environment env = EnvironmentUtils.quickEnvironment(5);
         NodeContainer container = new NodeContainer();
         SearchTree tree = new SearchTree(container);
 
@@ -43,8 +41,7 @@ public class SearchTreeTest
     @Test
     public void search2_2Layers()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment env = new Environment(functions, functions.get(0), 5);
+        Environment env = EnvironmentUtils.quickEnvironment(5);
         NodeContainer container = new NodeContainer();
         SearchTree tree = new SearchTree(container);
 
@@ -63,8 +60,7 @@ public class SearchTreeTest
     @Test
     public void search3_matchingDataTypes()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment env = new Environment(functions, functions.get(0), 5);
+        Environment env = EnvironmentUtils.quickEnvironment(5);
         NodeContainer container = new NodeContainer();
         SearchTree tree = new SearchTree(container);
 
@@ -78,11 +74,7 @@ public class SearchTreeTest
 
             for (IDataType dataType : function.getInputs())
             {
-                String name = mockingDetails(dataType).getMockCreationSettings()
-                                                      .getMockName()
-                                                      .toString();
-
-                if (name.equals("type_text"))
+                if (dataType == EnvironmentUtils.DATA_TEXT)
                 {
                     outputs.add(graph);
                     break;
@@ -103,11 +95,7 @@ public class SearchTreeTest
             boolean hasText = false;
             for (IDataType dataType : function.getOutputs())
             {
-                String name = mockingDetails(dataType).getMockCreationSettings()
-                                                      .getMockName()
-                                                      .toString();
-
-                if (name.equals("type_text"))
+                if (dataType == EnvironmentUtils.DATA_TEXT)
                     hasText = true;
             }
 
@@ -118,8 +106,7 @@ public class SearchTreeTest
     @Test(timeout = 3000)
     public void maxDepth()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment env = new Environment(functions, functions.get(0), 3);
+        Environment env = EnvironmentUtils.quickEnvironment(3);
         NodeContainer container = new NodeContainer();
         SearchTree tree = new SearchTree(container);
 
@@ -136,8 +123,7 @@ public class SearchTreeTest
     @Test(timeout = 3000)
     public void publishSolution()
     {
-        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
-        Environment env = new Environment(functions, functions.get(0), 3);
+        Environment env = EnvironmentUtils.quickEnvironment(3);
         NodeContainer container = new NodeContainer();
         SearchTree tree = new SearchTree(container);
 

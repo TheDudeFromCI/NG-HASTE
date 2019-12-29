@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,40 +12,65 @@ import java.util.List;
  */
 public final class Environment
 {
-    private final IFunction[] functions;
-    private final IFunction outputFunction;
+    private final List<IAxiom> axioms;
+    private final List<IAxiom> solutionAxioms;
+    private final List<IHeuristic> heuristics;
+    private final List<IFunction> functions;
     private final int nDepth;
 
     /**
-     * o Creates a new environment object.
+     * Creates a new environment object. This method creates an unmodifiable copy of
+     * all lists to make this object immutable.
      * 
      * @param functions
-     *     - All of the functions within this environment.
-     * @param outputFunction
-     *     - The output function for the solution. This function should be inside of
-     *     the function list. If not, it is added to the functions list internally.
+     *     - A list of functions. Must contain exactly one output function and at
+     *     least one input function.
+     * @param axioms
+     *     - A list of all axioms.
+     * @param solutionAxioms
+     *     - A list of all solution axioms.
+     * @param heuristics
+     *     - A list of all heuristics.
      * @param nDepth
      *     - The maximum depth of the search tree to use for searching for
      *     solutions. Larger values allow for more complicated solutions to be
      *     found, but use an expotentionally larger search space.
      * @throws IllegalArgumentException
-     *     If "nDepth" is <= 0.
+     *     If the functions list does not contain at least one input function and
+     *     exactly one output function.
      */
-    public Environment(List<IFunction> functions, IFunction outputFunction, int nDepth)
+    Environment(List<IFunction> functions, List<IAxiom> axioms, List<IAxiom> solutionAxioms,
+            List<IHeuristic> heuristics, int nDepth)
     {
-        if (nDepth <= 0)
-            throw new IllegalArgumentException("nDepth value must be > 0!");
+        validateFunctions(functions);
 
-        if (functions.contains(outputFunction))
-            this.functions = functions.toArray(new IFunction[functions.size()]);
-        else
+        this.axioms = Collections.unmodifiableList(new ArrayList<>(axioms));
+        this.solutionAxioms = Collections.unmodifiableList(new ArrayList<>(solutionAxioms));
+        this.heuristics = Collections.unmodifiableList(new ArrayList<>(heuristics));
+        this.functions = Collections.unmodifiableList(new ArrayList<>(functions));
+        this.nDepth = nDepth;
+    }
+
+    private void validateFunctions(List<IFunction> functions)
+    {
+        int inputs = 0;
+        int outputs = 0;
+
+        for (IFunction function : functions)
         {
-            this.functions = functions.toArray(new IFunction[functions.size() + 1]);
-            this.functions[this.functions.length - 1] = outputFunction;
+            if (function instanceof InputFunction)
+                inputs++;
+
+            if (function instanceof OutputFunction)
+                outputs++;
         }
 
-        this.outputFunction = outputFunction;
-        this.nDepth = nDepth;
+        if (inputs == 0)
+            throw new IllegalArgumentException("Function list must contain at least one input function!");
+
+        if (outputs != 1)
+            throw new IllegalArgumentException(
+                    "Function list must contain at exactly one output function! Actual is " + outputs);
     }
 
     /**
@@ -53,29 +80,11 @@ public final class Environment
      */
     public IFunction getOutputFunction()
     {
-        return outputFunction;
-    }
+        for (IFunction function : functions)
+            if (function instanceof OutputFunction)
+                return function;
 
-    /**
-     * Gets the number of functions in this environment.
-     * 
-     * @return The number of functions.
-     */
-    public int getFunctionCount()
-    {
-        return functions.length;
-    }
-
-    /**
-     * Gets the function at the specified index of this environment.
-     * 
-     * @param index
-     *     - The index of the function.
-     * @return The function.
-     */
-    public IFunction getFunctionAt(int index)
-    {
-        return functions[index];
+        throw new RuntimeException("Output function not present!");
     }
 
     /**
@@ -90,8 +99,8 @@ public final class Environment
      */
     public int getIndexOf(IFunction function)
     {
-        for (int i = 0; i < functions.length; i++)
-            if (function.equals(functions[i]))
+        for (int i = 0; i < functions.size(); i++)
+            if (function.equals(functions.get(i)))
                 return i;
 
         return -1;
@@ -112,7 +121,7 @@ public final class Environment
     {
         int max = 0;
 
-        max = Math.max(max, functions.length);
+        max = Math.max(max, functions.size());
         max = Math.max(max, countPlugs());
         max = Math.max(max, nDepth);
 
@@ -171,5 +180,45 @@ public final class Environment
     public int getMaxDepth()
     {
         return nDepth;
+    }
+
+    /**
+     * Gets an unmodifiable list of all axioms present in this environment.
+     * 
+     * @return A list of all axioms.
+     */
+    public List<IAxiom> getAxioms()
+    {
+        return axioms;
+    }
+
+    /**
+     * Gets an unmodifiable list of all solution axioms present in this environment.
+     * 
+     * @return A list of all solution axioms.
+     */
+    public List<IAxiom> getSolutionAxioms()
+    {
+        return solutionAxioms;
+    }
+
+    /**
+     * Gets an unmodifiable list of all heuristics present in this environment.
+     * 
+     * @return A list of all heuristics.
+     */
+    public List<IHeuristic> getHeuristics()
+    {
+        return heuristics;
+    }
+
+    /**
+     * Gets an unmodifiable list of all functions present in this environment.
+     * 
+     * @return A list of all functions.
+     */
+    public List<IFunction> getFunctions()
+    {
+        return functions;
     }
 }

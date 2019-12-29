@@ -4,6 +4,8 @@ package net.whg.nghaste;
  * The search tree class is a simple class which serves the purpose of building
  * the search tree for the NG-HASTE algorithm by finding the available children
  * for a given node graph based on the environment settings.
+ * <p>
+ * This class is not thread safe.
  */
 public class SearchTree
 {
@@ -132,11 +134,13 @@ public class SearchTree
         IDataType[] nodeInputs = nodeType.getInputs();
 
         int functionCount = graph.getEnvironment()
-                                 .getFunctionCount();
+                                 .getFunctions()
+                                 .size();
         for (int functionIndex = 0; functionIndex < functionCount; functionIndex++)
         {
             IDataType[] functionOutputs = graph.getEnvironment()
-                                               .getFunctionAt(functionIndex)
+                                               .getFunctions()
+                                               .get(functionIndex)
                                                .getOutputs();
             int functionOutputCount = functionOutputs.length;
             for (int functionOutputIndex = 0; functionOutputIndex < functionOutputCount; functionOutputIndex++)
@@ -163,7 +167,6 @@ public class SearchTree
     {
         int connectionCount = graph.getConnectionCount();
         int openPlugs = graph.countOpenPlugs();
-
         if (connectionCount + openPlugs > graph.getEnvironment()
                                                .getMaxDepth())
             return;
@@ -172,13 +175,31 @@ public class SearchTree
                       .isUnquie(hasher, graph))
             return;
 
-        // TODO Cull graph which breaks axioms
-        // TODO Calculate graph heuristics
+        for (IAxiom axiom : graph.getEnvironment()
+                                 .getAxioms())
+            if (!axiom.isValid(graph))
+                return;
 
         if (openPlugs == 0)
+        {
+            for (IAxiom axiom : graph.getEnvironment()
+                                     .getSolutionAxioms())
+                if (!axiom.isValid(graph))
+                    return;
+
             container.addSolution(graph);
+        }
         else
+        {
+            float heuristic = 0f;
+
+            for (IHeuristic h : graph.getEnvironment()
+                                     .getHeuristics())
+                heuristic += h.estimateHeuristic(graph);
+
+            graph.setHeuristicScore(heuristic);
             container.addNodeGraph(graph);
+        }
     }
 
     /**

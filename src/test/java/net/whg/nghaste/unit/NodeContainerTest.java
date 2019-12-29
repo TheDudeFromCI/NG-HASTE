@@ -6,13 +6,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
 import org.junit.Test;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.NodeContainer;
 import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.util.EnvironmentUtils;
 
 public class NodeContainerTest
 {
@@ -137,7 +137,7 @@ public class NodeContainerTest
         when(func.getInputs()).thenReturn(new IDataType[0]);
         when(func.getOutputs()).thenReturn(new IDataType[0]);
 
-        Environment env = new Environment(new ArrayList<>(), func, 3);
+        Environment env = EnvironmentUtils.quickEnvironment();
 
         NodeGraph g = NodeGraph.newGraph(env, 0);
         g.setHeuristicScore(h);

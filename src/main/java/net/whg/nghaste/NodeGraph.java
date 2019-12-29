@@ -276,7 +276,8 @@ public class NodeGraph implements Comparable<NodeGraph>
         int nodeCount = getNodeCount();
         for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
         {
-            IFunction nodeType = environment.getFunctionAt(getNodeType(nodeIndex));
+            IFunction nodeType = environment.getFunctions()
+                                            .get(getNodeType(nodeIndex));
             openPlugs += nodeType.getInputs().length;
         }
 
@@ -327,7 +328,8 @@ public class NodeGraph implements Comparable<NodeGraph>
      */
     public IFunction getNodeAsFunction(int index)
     {
-        return environment.getFunctionAt(getNodeType(index));
+        return environment.getFunctions()
+                          .get(getNodeType(index));
     }
 
     /**

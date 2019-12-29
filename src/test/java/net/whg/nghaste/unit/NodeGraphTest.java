@@ -3,13 +3,13 @@ package net.whg.nghaste.unit;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
 import org.junit.Test;
 import net.whg.nghaste.Connection;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.util.EnvironmentUtils;
 
 public class NodeGraphTest
 {
@@ -19,7 +19,7 @@ public class NodeGraphTest
         when(func.getInputs()).thenReturn(new IDataType[0]);
         when(func.getOutputs()).thenReturn(new IDataType[0]);
 
-        Environment env = new Environment(new ArrayList<>(), func, 1 << (bytes * 7));
+        Environment env = EnvironmentUtils.quickEnvironment(1 << (bytes * 7));
 
         NodeGraph g = NodeGraph.newGraph(env, nodeType);
         return g;
