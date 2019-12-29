@@ -8,6 +8,7 @@ package net.whg.nghaste;
 public class SearchTree
 {
     private final Connection connectionBuf = new Connection();
+    private final GraphHasher hasher = new GraphHasher();
     private final NodeContainer container;
 
     /**
@@ -113,7 +114,10 @@ public class SearchTree
                                                .getMaxDepth())
             return;
 
-        // TODO Check graph for duplicates
+        if (!container.getDuplicateFinder()
+                      .isUnquie(hasher, graph))
+            return;
+
         // TODO Cull graph which breaks axioms
         // TODO Calculate graph heuristics
 

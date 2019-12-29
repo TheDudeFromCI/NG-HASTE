@@ -13,14 +13,14 @@ import net.whg.nghaste.util.EnvironmentUtils;
 
 public class Algorithm1Test
 {
-    @Test(timeout = 10000)
+    @Test
     public void test()
     {
         List<IFunction> functions = EnvironmentUtils.buildFunctionList();
         Environment environment = new Environment(functions, functions.get(0), 5);
         NGHasteAlgorithm algorithm = new NGHasteAlgorithm(environment);
 
-        algorithm.startWorkers(2);
+        algorithm.startWorkers(1);
         await().atMost(8, TimeUnit.SECONDS)
                .until(() -> algorithm.getSolutionCount() >= 10);
         algorithm.disposeWorkers();
@@ -31,5 +31,20 @@ public class Algorithm1Test
             NodeGraph solution = algorithm.getSolution(i);
             assertEquals(0, solution.countOpenPlugs());
         }
+    }
+
+    @Test
+    public void test_multithreaded()
+    {
+        List<IFunction> functions = EnvironmentUtils.buildFunctionList();
+        Environment environment = new Environment(functions, functions.get(0), 3);
+        NGHasteAlgorithm algorithm = new NGHasteAlgorithm(environment);
+
+        algorithm.startWorkers(3);
+        await().atMost(13, TimeUnit.SECONDS)
+               .until(() -> algorithm.getRemainingGraphs() == 0);
+        algorithm.disposeWorkers();
+
+        assertEquals(31, algorithm.getSolutionCount());
     }
 }

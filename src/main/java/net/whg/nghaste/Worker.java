@@ -76,6 +76,7 @@ class Worker extends Thread
             }
 
             searchTree.placeNeighbors(graph);
+            container.finishGraph();
         }
     }
 }

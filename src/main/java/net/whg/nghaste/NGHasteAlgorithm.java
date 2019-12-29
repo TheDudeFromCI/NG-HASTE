@@ -2,6 +2,7 @@ package net.whg.nghaste;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The NG-HASTE algorithm is a logic-based probleming solving algorithm. The
@@ -122,5 +123,20 @@ public class NGHasteAlgorithm
     public void removeSolution(NodeGraph graph)
     {
         container.removeSolution(graph);
+    }
+
+    /**
+     * Gets the number of unprocessed graphs which currently exist within the search
+     * space. This does not count graphs which have not yet been discovered by the
+     * search tree. This value may change rapidly as the algorithm operates.
+     * <p>
+     * When this value is equal to 0, the entire search space has been exhasted.
+     * 
+     * @return The number of graphs pending processing, or currently in the middle
+     *     of processing.
+     */
+    public int getRemainingGraphs()
+    {
+        return container.getRemainingGraphs();
     }
 }

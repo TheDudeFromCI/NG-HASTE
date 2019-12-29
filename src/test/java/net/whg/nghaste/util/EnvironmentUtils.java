@@ -4,11 +4,23 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 
 public class EnvironmentUtils
 {
+    public static Environment quickEnvironment()
+    {
+        return quickEnvironment(5);
+    }
+
+    public static Environment quickEnvironment(int size)
+    {
+        List<IFunction> functions = buildFunctionList();
+        return new Environment(functions, functions.get(0), size);
+    }
+
     public static List<IFunction> buildFunctionList()
     {
         List<IFunction> functions = new ArrayList<>();

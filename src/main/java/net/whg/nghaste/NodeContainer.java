@@ -15,7 +15,9 @@ public class NodeContainer
 {
     private final PriorityBlockingQueue<NodeGraph> queue = new PriorityBlockingQueue<>();
     private final List<NodeGraph> solutions = Collections.synchronizedList(new ArrayList<>());
+    private final DuplicateFinder duplicateFinder = new DuplicateFinder();
     private final AtomicInteger totalGraphs = new AtomicInteger(0);
+    private final AtomicInteger unprocessedGraphs = new AtomicInteger(0);
 
     /**
      * Adds a new NodeGraph to this node container queue. The node graph is assumed
@@ -27,6 +29,7 @@ public class NodeContainer
     public void addNodeGraph(NodeGraph graph)
     {
         queue.add(graph);
+        unprocessedGraphs.incrementAndGet();
     }
 
     /**
@@ -156,5 +159,44 @@ public class NodeContainer
     public int getTotalGraphsSearched()
     {
         return totalGraphs.get();
+    }
+
+    /**
+     * Gets the duplicate finder object assosicated with this node container. The
+     * state of the duplicate finder is paired with the state of the node container,
+     * saving an internal state which is updated as further graphs are searched
+     * within the tree.
+     * 
+     * @return The duplicate finder.
+     */
+    public DuplicateFinder getDuplicateFinder()
+    {
+        return duplicateFinder;
+    }
+
+    /**
+     * Gets the current number of active solutions which have not yet finished being
+     * processed. This value is changed constantly as more of the search space is
+     * explored. This value is calculated by adding the number of unprocessed graphs
+     * within the node container with the number of workers currently in the middle
+     * of processing a solution. When this value is equal to 0, the entire search
+     * space has been explored.
+     * 
+     * @return The number of unprocessed solutions which exist in the current
+     *     instant.
+     */
+    public int getRemainingGraphs()
+    {
+        return unprocessedGraphs.get();
+    }
+
+    /**
+     * This method should be called by the worker threads after finishing processing
+     * on a graph. This method is used for keeping an up to date count on
+     * unprocessed graphs.
+     */
+    void finishGraph()
+    {
+        unprocessedGraphs.decrementAndGet();
     }
 }

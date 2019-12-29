@@ -29,8 +29,6 @@ public class NodeGraph implements Comparable<NodeGraph>
      * @param nodeType
      *     - The type of node to use as the output node.
      * @return The newly created node graph.
-     * @throws IllegalArgumentException
-     *     If the numSize is not a value of 1, 2, or 4.
      */
     public static NodeGraph newGraph(Environment environment, int nodeType)
     {
@@ -213,7 +211,8 @@ public class NodeGraph implements Comparable<NodeGraph>
         int nodeCount = getNodeCount();
         int off = nodeCount + 1 + index * 4;
 
-        out.set(readNumber(off + 0), readNumber(off + 1), readNumber(off + 2), readNumber(off + 3));
+        out.set(readNumber(off + 0), readNumber(off + 1), readNumber(off + 2), readNumber(off + 3),
+                getNodeType(readNumber(off + 0)), getNodeType(readNumber(off + 2)));
     }
 
     /**

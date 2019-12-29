@@ -143,13 +143,15 @@ public final class Environment
      * 
      * @param value
      *     - The value.
-     * @return The smallest number of bytes, being 1, 2, or 4, representing a byte,
-     *     a short, or short respectively.
+     * @return The smallest number of bytes, being 1, 2, 3, or 4.
      */
     private int countBytes(int value)
     {
-        if (value >= 1 << 16)
+        if (value >= 1 << 24)
             return 4;
+
+        if (value >= 1 << 16)
+            return 3;
 
         if (value >= 1 << 8)
             return 2;
