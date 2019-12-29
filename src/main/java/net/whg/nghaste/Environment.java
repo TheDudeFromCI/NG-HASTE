@@ -84,7 +84,7 @@ public final class Environment
             if (function instanceof OutputFunction)
                 return function;
 
-        throw new RuntimeException("Output function not present!");
+        throw new IllegalStateException("Output function not present!");
     }
 
     /**
