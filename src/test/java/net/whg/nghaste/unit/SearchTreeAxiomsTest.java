@@ -123,7 +123,7 @@ public class SearchTreeAxiomsTest
         SearchTree tree = new SearchTree(container);
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
 
-        float last = Float.MAX_VALUE;
+        int connectionLast = 0;
 
         int graphCount = 0;
         while (container.size() > 0)
@@ -131,15 +131,14 @@ public class SearchTreeAxiomsTest
             graphCount++;
             NodeGraph g = container.getNodeGraph();
 
-            float h = g.getHeuristicScore();
-            assertTrue(h <= last);
-            last = h;
+            int con = g.getConnectionCount();
+            assertTrue(con >= connectionLast);
+            connectionLast = con;
 
             tree.placeNeighbors(g);
         }
 
-        assertNotEquals(Float.MAX_VALUE, last);
-        assertNotEquals(0, last);
+        assertNotEquals(0, connectionLast);
 
         assertEquals(1115, graphCount);
         assertEquals(878, container.getSolutionCount());
