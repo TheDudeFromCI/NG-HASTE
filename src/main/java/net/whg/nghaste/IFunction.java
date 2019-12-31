@@ -34,16 +34,17 @@ public interface IFunction extends IRuleHolder
 
     /**
      * This method is called to execute the function. This is called periodically
-     * throughout the execution of the algorithm, and often output of the algorithm
-     * to run the newly generated code. This method should always return the same
-     * output for the same inputs.
+     * throughout the execution of the algorithm, and often on the solution of the
+     * algorithm to run the newly generated code. This method should always return
+     * the same output for the same inputs.
      * 
      * @param inputs
      *     - A list of inputs, with data types matching the data types listed as
      *     inputs.
-     * @param outputs
-     *     - An empty array to write output objects to, matching the data types
-     *     listed as outputs.
+     * @return An arrays of outputs of this function, matching the data types listed
+     *     as outputs of this function. Each data instance should be a completely
+     *     new instance, not the same instance as the inputs. Outputs are value
+     *     based, not reference based.
      */
-    void execute(Object[] inputs, Object[] outputs);
+    IDataInstance[] execute(IDataInstance[] inputs);
 }

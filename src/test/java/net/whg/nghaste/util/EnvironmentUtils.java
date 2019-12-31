@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import net.whg.nghaste.Environment;
 import net.whg.nghaste.EnvironmentBuilder;
+import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.InputFunction;
@@ -57,9 +58,9 @@ public class EnvironmentUtils
             }
 
             @Override
-            public void execute(Object[] inputs, Object[] outputs)
+            public IDataInstance[] execute(IDataInstance[] inputs)
             {
-                throw new UnsupportedOperationException();
+                return null;
             }
         };
     }
@@ -69,9 +70,9 @@ public class EnvironmentUtils
         return new InputFunction(outputs)
         {
             @Override
-            public void execute(Object[] inputs, Object[] outputs)
+            public IDataInstance[] execute(IDataInstance[] inputs)
             {
-                throw new UnsupportedOperationException();
+                return null;
             }
         };
     }
@@ -81,9 +82,9 @@ public class EnvironmentUtils
         return new OutputFunction(inputs)
         {
             @Override
-            public void execute(Object[] inputs, Object[] outputs)
+            public IDataInstance[] execute(IDataInstance[] inputs)
             {
-                throw new UnsupportedOperationException();
+                return null;
             }
         };
     }
