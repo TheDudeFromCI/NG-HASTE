@@ -42,10 +42,10 @@ public final class ThreadDataType implements IDataType
         if (obj == this)
             return true;
 
-        if (!(obj instanceof ThreadDataType))
+        if (obj == null)
             return false;
 
-        return true;
+        return obj instanceof ThreadDataType;
     }
 
     @Override

@@ -15,8 +15,21 @@ public final class SingleInstanceAxiom implements IAxiom
 {
     private final IDataType dataType;
 
+    /**
+     * Creates a new SingleInstance axiom. This axiom will ensure that, at most, one
+     * connection of the given data type may be pulled out of any output plug.
+     * Output plugs of the given type may have 0 or 1 connections.
+     * 
+     * @param dataType
+     *     - The type of data to validate.
+     * @throws IllegalArgumentException
+     *     If dataType is null.
+     */
     public SingleInstanceAxiom(IDataType dataType)
     {
+        if (dataType == null)
+            throw new IllegalArgumentException("Datatype cannot be null!");
+
         this.dataType = dataType;
     }
 
@@ -58,10 +71,7 @@ public final class SingleInstanceAxiom implements IAxiom
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((dataType == null) ? 0 : dataType.hashCode());
-        return result;
+        return dataType.hashCode() + 2349082;
     }
 
     @Override
@@ -73,18 +83,10 @@ public final class SingleInstanceAxiom implements IAxiom
         if (obj == null)
             return false;
 
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof SingleInstanceAxiom))
             return false;
 
         SingleInstanceAxiom other = (SingleInstanceAxiom) obj;
-        if (dataType == null)
-        {
-            if (other.dataType != null)
-                return false;
-        }
-        else if (!dataType.equals(other.dataType))
-            return false;
-
-        return true;
+        return dataType.equals(other.dataType);
     }
 }

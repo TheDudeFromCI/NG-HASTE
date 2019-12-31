@@ -15,8 +15,22 @@ public final class NoUnusedObjectAxiom implements IAxiom
 {
     private final IDataType dataType;
 
+    /**
+     * Creates a new NoUnusedObject axiom. This solution axiom will ensure that all
+     * created instances of the given data type are used. That being, all output
+     * plugs that use the provided data type must have at least one connection
+     * coming from them.
+     * 
+     * @param dataType
+     *     - The type of data to validate.
+     * @throws IllegalArgumentException
+     *     If dataType is null.
+     */
     public NoUnusedObjectAxiom(IDataType dataType)
     {
+        if (dataType == null)
+            throw new IllegalArgumentException("Datatype cannot be null!");
+
         this.dataType = dataType;
     }
 
@@ -56,10 +70,7 @@ public final class NoUnusedObjectAxiom implements IAxiom
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((dataType == null) ? 0 : dataType.hashCode());
-        return result;
+        return dataType.hashCode() + 123450912;
     }
 
     @Override
@@ -71,18 +82,10 @@ public final class NoUnusedObjectAxiom implements IAxiom
         if (obj == null)
             return false;
 
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof NoUnusedObjectAxiom))
             return false;
 
         NoUnusedObjectAxiom other = (NoUnusedObjectAxiom) obj;
-        if (dataType == null)
-        {
-            if (other.dataType != null)
-                return false;
-        }
-        else if (!dataType.equals(other.dataType))
-            return false;
-
-        return true;
+        return dataType.equals(other.dataType);
     }
 }

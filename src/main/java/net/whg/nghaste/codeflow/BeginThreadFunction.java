@@ -29,10 +29,10 @@ public final class BeginThreadFunction extends InputFunction
         if (obj == this)
             return true;
 
-        if (!(obj instanceof ThreadDataType))
+        if (obj == null)
             return false;
 
-        return true;
+        return obj instanceof BeginThreadFunction;
     }
 
     @Override
