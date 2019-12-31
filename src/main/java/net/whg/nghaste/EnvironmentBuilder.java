@@ -12,7 +12,7 @@ public class EnvironmentBuilder
 {
     private final List<IFunction> functions = new ArrayList<>();
     private final List<IAxiom> axioms = new ArrayList<>();
-    private final List<IAxiom> solutionAxioms = new ArrayList<>();
+    private final List<ISolutionAxiom> solutionAxioms = new ArrayList<>();
     private final List<IHeuristic> heuristics = new ArrayList<>();
     private int depth = 20;
 
@@ -78,12 +78,12 @@ public class EnvironmentBuilder
      *     - The axiom to add.
      * @return This object for chaining.
      */
-    public EnvironmentBuilder addSolutionAxiom(IAxiom axiom)
+    public EnvironmentBuilder addSolutionAxiom(ISolutionAxiom axiom)
     {
         if (axiom == null)
             return this;
 
-        if (axioms.contains(axiom))
+        if (solutionAxioms.contains(axiom))
             return this;
 
         solutionAxioms.add(axiom);
@@ -157,7 +157,7 @@ public class EnvironmentBuilder
         for (IAxiom axiom : ruleHolder.getRequiredAxioms())
             addAxiom(axiom);
 
-        for (IAxiom solutionAxiom : ruleHolder.getRequiredSolutionAxioms())
+        for (ISolutionAxiom solutionAxiom : ruleHolder.getRequiredSolutionAxioms())
             addSolutionAxiom(solutionAxiom);
 
         for (IHeuristic heuristic : ruleHolder.getRequiredHeuristics())

@@ -2,6 +2,7 @@ package net.whg.nghaste.codeflow;
 
 import net.whg.nghaste.IAxiom;
 import net.whg.nghaste.IDataType;
+import net.whg.nghaste.ISolutionAxiom;
 import net.whg.nghaste.util.NoUnusedObjectAxiom;
 import net.whg.nghaste.util.SingleInstanceAxiom;
 
@@ -31,9 +32,9 @@ public final class ThreadDataType implements IDataType
     }
 
     @Override
-    public IAxiom[] getRequiredSolutionAxioms()
+    public ISolutionAxiom[] getRequiredSolutionAxioms()
     {
-        return new IAxiom[] {new NoUnusedObjectAxiom(this)};
+        return new ISolutionAxiom[] {new NoUnusedObjectAxiom(this)};
     }
 
     @Override

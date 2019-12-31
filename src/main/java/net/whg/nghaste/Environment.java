@@ -13,7 +13,7 @@ import java.util.List;
 public final class Environment
 {
     private final List<IAxiom> axioms;
-    private final List<IAxiom> solutionAxioms;
+    private final List<ISolutionAxiom> solutionAxioms;
     private final List<IHeuristic> heuristics;
     private final List<IFunction> functions;
     private final int nDepth;
@@ -39,7 +39,7 @@ public final class Environment
      *     If the functions list does not contain at least one input function and
      *     exactly one output function.
      */
-    Environment(List<IFunction> functions, List<IAxiom> axioms, List<IAxiom> solutionAxioms,
+    Environment(List<IFunction> functions, List<IAxiom> axioms, List<ISolutionAxiom> solutionAxioms,
             List<IHeuristic> heuristics, int nDepth)
     {
         validateFunctions(functions);
@@ -197,7 +197,7 @@ public final class Environment
      * 
      * @return A list of all solution axioms.
      */
-    public List<IAxiom> getSolutionAxioms()
+    public List<ISolutionAxiom> getSolutionAxioms()
     {
         return solutionAxioms;
     }

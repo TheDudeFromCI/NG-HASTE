@@ -7,9 +7,6 @@ package net.whg.nghaste;
  */
 public interface IRuleHolder
 {
-    static final IAxiom[] EMPTY_AXIOMS = new IAxiom[0];
-    static final IHeuristic[] EMPTY_HEURISTICS = new IHeuristic[0];
-
     /**
      * Gets a list of additional axioms to add to the environment that are required
      * by this component. The default implementation returns an empty array. This
@@ -22,7 +19,7 @@ public interface IRuleHolder
      */
     default IAxiom[] getRequiredAxioms()
     {
-        return EMPTY_AXIOMS;
+        return new IAxiom[0];
     }
 
     /**
@@ -35,9 +32,9 @@ public interface IRuleHolder
      * @return An array of solution axioms that are required by this component to
      *     work properly.
      */
-    default IAxiom[] getRequiredSolutionAxioms()
+    default ISolutionAxiom[] getRequiredSolutionAxioms()
     {
-        return EMPTY_AXIOMS;
+        return new ISolutionAxiom[0];
     }
 
     /**
@@ -52,6 +49,6 @@ public interface IRuleHolder
      */
     default IHeuristic[] getRequiredHeuristics()
     {
-        return EMPTY_HEURISTICS;
+        return new IHeuristic[0];
     }
 }

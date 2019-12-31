@@ -9,13 +9,10 @@ package net.whg.nghaste;
 public interface IAxiom
 {
     /**
-     * Checks whether or not a graph is valid or not. This function is called on
-     * every graph witihin the search tree as it is discovered. A graph is
-     * considered invalid if there are no new connections or nodes which can be
-     * added to create a valid solution.
-     * <p>
-     * This function is also called on solution graphs to check whether or not they
-     * are valid, following the same rules.
+     * Checks whether a graph is valid or not. This function is called on every
+     * graph witihin the search tree as it is discovered. A graph is considered
+     * invalid if there are no new connections or nodes which can be added to create
+     * a valid solution.
      * 
      * @param graph
      *     - The graph to validate.

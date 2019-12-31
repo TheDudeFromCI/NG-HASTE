@@ -1,8 +1,7 @@
 package net.whg.nghaste.util;
 
-import net.whg.nghaste.Connection;
-import net.whg.nghaste.IAxiom;
 import net.whg.nghaste.IDataType;
+import net.whg.nghaste.ISolutionAxiom;
 import net.whg.nghaste.NodeGraph;
 
 /**
@@ -11,7 +10,7 @@ import net.whg.nghaste.NodeGraph;
  * output plugs of the given data type which have no connection coming out of
  * them.
  */
-public final class NoUnusedObjectAxiom implements IAxiom
+public final class NoUnusedObjectAxiom implements ISolutionAxiom
 {
     private final IDataType dataType;
 

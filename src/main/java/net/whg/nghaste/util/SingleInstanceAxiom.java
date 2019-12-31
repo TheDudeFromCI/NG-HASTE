@@ -1,6 +1,5 @@
 package net.whg.nghaste.util;
 
-import net.whg.nghaste.Connection;
 import net.whg.nghaste.IAxiom;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.NodeGraph;
