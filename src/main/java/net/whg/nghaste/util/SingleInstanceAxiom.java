@@ -36,10 +36,7 @@ public final class SingleInstanceAxiom implements IAxiom
     @Override
     public boolean isValid(NodeGraph graph)
     {
-        Connection connection = new Connection();
-
         int nodeCount = graph.getNodeCount();
-        int connectionCount = graph.getConnectionCount();
         for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
         {
             IDataType[] outputPlugs = graph.getNodeAsFunction(nodeIndex)
@@ -49,19 +46,8 @@ public final class SingleInstanceAxiom implements IAxiom
                 if (!outputPlugs[plugIndex].equals(dataType))
                     continue;
 
-                int cons = 0;
-                for (int c = 0; c < connectionCount; c++)
-                {
-                    graph.getConnection(c, connection);
-
-                    if (connection.getOutputNode() == nodeIndex && connection.getOutputPlug() == plugIndex)
-                    {
-                        cons++;
-
-                        if (cons > 1)
-                            return false;
-                    }
-                }
+                if (graph.getOutputConnectionCount(nodeIndex, plugIndex) > 1)
+                    return false;
             }
         }
 

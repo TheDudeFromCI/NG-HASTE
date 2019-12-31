@@ -37,10 +37,7 @@ public final class NoUnusedObjectAxiom implements IAxiom
     @Override
     public boolean isValid(NodeGraph graph)
     {
-        Connection connection = new Connection();
-
         int nodeCount = graph.getNodeCount();
-        int connectionCount = graph.getConnectionCount();
         for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
         {
             IDataType[] outputs = graph.getNodeAsFunction(nodeIndex)
@@ -50,16 +47,7 @@ public final class NoUnusedObjectAxiom implements IAxiom
                 if (!outputs[plugIndex].equals(dataType))
                     continue;
 
-                int refs = 0;
-                for (int connectionIndex = 0; connectionIndex < connectionCount; connectionIndex++)
-                {
-                    graph.getConnection(connectionIndex, connection);
-
-                    if (connection.getOutputNode() == nodeIndex && connection.getOutputPlug() == plugIndex)
-                        refs++;
-                }
-
-                if (refs == 0)
+                if (graph.getOutputConnectionCount(nodeIndex, plugIndex) == 0)
                     return false;
             }
         }
