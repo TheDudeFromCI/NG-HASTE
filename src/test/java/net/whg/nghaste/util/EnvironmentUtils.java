@@ -54,19 +54,37 @@ public class EnvironmentUtils
             {
                 return inputs;
             }
+
+            @Override
+            public void execute(Object[] inputs, Object[] outputs)
+            {
+                throw new UnsupportedOperationException();
+            }
         };
     }
 
     private static IFunction inputFunc(IDataType[] outputs)
     {
         return new InputFunction(outputs)
-        {};
+        {
+            @Override
+            public void execute(Object[] inputs, Object[] outputs)
+            {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     private static IFunction outputFunc(IDataType[] inputs)
     {
         return new OutputFunction(inputs)
-        {};
+        {
+            @Override
+            public void execute(Object[] inputs, Object[] outputs)
+            {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     public static Environment quickEnvironment()
