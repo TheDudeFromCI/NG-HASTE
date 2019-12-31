@@ -5,31 +5,31 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import net.whg.nghaste.NodeGraph;
 import net.whg.nghaste.util.EnvironmentUtils;
-import net.whg.nghaste.util.SingleInstanceAxiom;
+import net.whg.nghaste.util.SingleConstAxiom;
 
-public class SingleInstanceAxiomTest
+public class SingleConstAxiomTest
 {
     @Test
-    public void singleOutput_isValid()
-    {
-        NodeGraph graph = NodeGraph.newGraph(EnvironmentUtils.quickEnvironment(), 0);
-        graph = graph.addConnectionAndNode(1, 0, 0, 0);
-        graph = graph.addConnectionAndNode(1, 0, 1, 0);
-        graph = graph.addConnectionAndNode(2, 0, 2, 1);
-
-        SingleInstanceAxiom axiom = new SingleInstanceAxiom(EnvironmentUtils.DATA_NUMBER);
-        assertTrue((axiom.isValid(graph)));
-    }
-
-    @Test
-    public void doubleOutput_notValid()
+    public void singleConst_isValid()
     {
         NodeGraph graph = NodeGraph.newGraph(EnvironmentUtils.quickEnvironment(), 0);
         graph = graph.addConnectionAndNode(1, 0, 0, 0);
         graph = graph.addConnectionAndNode(2, 0, 1, 0);
         graph = graph.addConnection(2, 0, 1, 1);
 
-        SingleInstanceAxiom axiom = new SingleInstanceAxiom(EnvironmentUtils.DATA_NUMBER);
+        SingleConstAxiom axiom = new SingleConstAxiom();
+        assertTrue((axiom.isValid(graph)));
+    }
+
+    @Test
+    public void doubleConst_notValid()
+    {
+        NodeGraph graph = NodeGraph.newGraph(EnvironmentUtils.quickEnvironment(), 0);
+        graph = graph.addConnectionAndNode(1, 0, 0, 0);
+        graph = graph.addConnectionAndNode(2, 0, 1, 0);
+        graph = graph.addConnectionAndNode(2, 0, 1, 1);
+
+        SingleConstAxiom axiom = new SingleConstAxiom();
         assertFalse((axiom.isValid(graph)));
     }
 }
