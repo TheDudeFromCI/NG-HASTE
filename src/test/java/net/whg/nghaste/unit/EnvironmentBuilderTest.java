@@ -1,5 +1,6 @@
 package net.whg.nghaste.unit;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import org.junit.Test;
@@ -68,5 +69,48 @@ public class EnvironmentBuilderTest
                                 .addFunction(EnvironmentUtils.FUNC0_NUM_OUT)
                                 .setMaxDepth(-1)
                                 .build();
+    }
+
+    @Test
+    public void addNullAxiomsAndHeuristics()
+    {
+        Environment env = new EnvironmentBuilder().addFunction(EnvironmentUtils.FUNC2_NUM_CONST)
+                                                  .addFunction(EnvironmentUtils.FUNC0_NUM_OUT)
+                                                  .addAxiom(null)
+                                                  .addSolutionAxiom(null)
+                                                  .addHeuristic(null)
+                                                  .build();
+
+        assertEquals(0, env.getAxioms()
+                           .size());
+        assertEquals(0, env.getSolutionAxioms()
+                           .size());
+        assertEquals(0, env.getHeuristics()
+                           .size());
+    }
+
+    @Test
+    public void addDuplicateAxiomsAndHeuristics()
+    {
+        IAxiom axiom = mock(IAxiom.class);
+        ISolutionAxiom solutionAxiom = mock(ISolutionAxiom.class);
+        IHeuristic heuristic = mock(IHeuristic.class);
+
+        Environment env = new EnvironmentBuilder().addFunction(EnvironmentUtils.FUNC2_NUM_CONST)
+                                                  .addFunction(EnvironmentUtils.FUNC0_NUM_OUT)
+                                                  .addAxiom(axiom)
+                                                  .addSolutionAxiom(solutionAxiom)
+                                                  .addHeuristic(heuristic)
+                                                  .addAxiom(axiom)
+                                                  .addSolutionAxiom(solutionAxiom)
+                                                  .addHeuristic(heuristic)
+                                                  .build();
+
+        assertEquals(1, env.getAxioms()
+                           .size());
+        assertEquals(1, env.getSolutionAxioms()
+                           .size());
+        assertEquals(1, env.getHeuristics()
+                           .size());
     }
 }

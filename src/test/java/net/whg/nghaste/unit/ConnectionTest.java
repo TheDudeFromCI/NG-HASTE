@@ -38,6 +38,24 @@ public class ConnectionTest
     }
 
     @Test
+    public void equals_isEqual_self()
+    {
+        Connection c = new Connection();
+        c.set(102, 203, 305, 406, 505, 680);
+
+        assertTrue(c.equals(c));
+    }
+
+    @Test
+    public void equals_notEqual_otherObject()
+    {
+        Connection c = new Connection();
+        c.set(102, 203, 305, 406, 505, 680);
+
+        assertFalse(c.equals(new Object()));
+    }
+
+    @Test
     public void equals_notEqual()
     {
         Connection con1 = new Connection();
