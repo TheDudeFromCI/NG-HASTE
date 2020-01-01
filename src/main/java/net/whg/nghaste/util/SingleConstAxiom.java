@@ -38,10 +38,10 @@ public final class SingleConstAxiom implements IAxiom
         if (obj == this)
             return true;
 
-        if (!(obj instanceof SingleConstAxiom))
+        if (obj == null)
             return false;
 
-        return true;
+        return obj instanceof SingleConstAxiom;
     }
 
     @Override
