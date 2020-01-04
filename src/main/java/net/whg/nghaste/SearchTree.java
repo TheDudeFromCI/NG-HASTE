@@ -182,8 +182,8 @@ public class SearchTree
 
         if (openPlugs == 0)
         {
-            for (IAxiom axiom : graph.getEnvironment()
-                                     .getSolutionAxioms())
+            for (ISolutionAxiom axiom : graph.getEnvironment()
+                                             .getSolutionAxioms())
                 if (!axiom.isValid(graph))
                     return;
 

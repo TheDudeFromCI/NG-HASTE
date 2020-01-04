@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.whg.nghaste.util.ByteUtils;
 
 /**
  * The graph hasher is an object which is used to break a graph down into a
@@ -70,7 +71,7 @@ public class GraphHasher
      */
     private byte[] hashConnectionList()
     {
-        int numSize = countBytes(getHashSize());
+        int numSize = ByteUtils.countBytes(getHashSize());
 
         int j = 1;
         byte[] hash = new byte[connectionBuffer.size() * 6 * numSize + 1];
@@ -126,26 +127,5 @@ public class GraphHasher
             bytes[index++] = (byte) ((value >> (i * 8)) & 0xFF);
 
         return index;
-    }
-
-    /**
-     * Calculates then fewest number of bytes required to represent a single value.
-     * 
-     * @param value
-     *     - The value.
-     * @return The smallest number of bytes, being 1, 2, 3, or 4.
-     */
-    private int countBytes(int value)
-    {
-        if (value >= 1 << 24)
-            return 4;
-
-        if (value >= 1 << 16)
-            return 3;
-
-        if (value >= 1 << 8)
-            return 2;
-
-        return 1;
     }
 }

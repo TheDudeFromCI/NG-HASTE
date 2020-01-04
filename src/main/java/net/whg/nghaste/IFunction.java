@@ -16,7 +16,7 @@ package net.whg.nghaste;
  * This function may be called continuously after the algorithm is finished for
  * execution of the output algorithm through the rest of the application.
  */
-public interface IFunction
+public interface IFunction extends IRuleHolder
 {
     /**
      * Gets the input types for this function.
@@ -31,4 +31,20 @@ public interface IFunction
      * @return An array of outputs used when this function
      */
     IDataType[] getOutputs();
+
+    /**
+     * This method is called to execute the function. This is called periodically
+     * throughout the execution of the algorithm, and often on the solution of the
+     * algorithm to run the newly generated code. This method should always return
+     * the same output for the same inputs.
+     * 
+     * @param inputs
+     *     - A list of inputs, with data types matching the data types listed as
+     *     inputs.
+     * @return An arrays of outputs of this function, matching the data types listed
+     *     as outputs of this function. Each data instance should be a completely
+     *     new instance, not the same instance as the inputs. Outputs are value
+     *     based, not reference based.
+     */
+    IDataInstance[] execute(IDataInstance[] inputs);
 }

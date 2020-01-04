@@ -27,13 +27,13 @@ public class SearchTreeAxiomsTest
             {
                 IFunction type = graph.getNodeAsFunction(i);
 
-                if (type == EnvironmentUtils.FUNC_NUM_CONST)
+                if (type == EnvironmentUtils.FUNC2_NUM_CONST)
                     numberConsts++;
 
-                if (type == EnvironmentUtils.FUNC_TEXT_CONST)
+                if (type == EnvironmentUtils.FUNC3_TEXT_CONST)
                     textConsts++;
 
-                if (type == EnvironmentUtils.FUNC_BOOL_CONST)
+                if (type == EnvironmentUtils.FUNC4_BOOL_CONST)
                     boolConsts++;
             }
 
@@ -87,10 +87,10 @@ public class SearchTreeAxiomsTest
                 {
                     IFunction type = graph.getNodeAsFunction(i);
 
-                    if (type == EnvironmentUtils.FUNC_TEXT_TO_BOOL)
+                    if (type == EnvironmentUtils.FUNC8_TEXT_TO_BOOL)
                         return false;
 
-                    if (type == EnvironmentUtils.FUNC_TEXT_TO_INT)
+                    if (type == EnvironmentUtils.FUNC7_TEXT_TO_INT)
                         return false;
                 }
 

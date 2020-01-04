@@ -341,4 +341,27 @@ public class NodeGraph implements Comparable<NodeGraph>
     {
         return environment;
     }
+
+    public int getOutputConnectionCount(int nodeIndex, int plugIndex)
+    {
+        if (nodeIndex < 0 || nodeIndex >= getNodeCount())
+            throw new ArrayIndexOutOfBoundsException("Node does not exist: " + nodeIndex);
+
+        if (plugIndex < 0 || plugIndex >= getNodeAsFunction(nodeIndex).getOutputs().length)
+            throw new ArrayIndexOutOfBoundsException("Output plug does not exist: " + plugIndex);
+
+        Connection connection = new Connection();
+        int cons = 0;
+
+        int connectionCount = getConnectionCount();
+        for (int connectionIndex = 0; connectionIndex < connectionCount; connectionIndex++)
+        {
+            getConnection(connectionIndex, connection);
+
+            if (connection.getOutputNode() == nodeIndex && connection.getOutputPlug() == plugIndex)
+                cons++;
+        }
+
+        return cons;
+    }
 }

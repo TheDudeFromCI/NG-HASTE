@@ -6,7 +6,5 @@ package net.whg.nghaste;
  * information being passed around through the graph but simply a blueprint for
  * assigning what form the data is in.
  */
-public interface IDataType
-{
-
-}
+public interface IDataType extends IRuleHolder
+{}
