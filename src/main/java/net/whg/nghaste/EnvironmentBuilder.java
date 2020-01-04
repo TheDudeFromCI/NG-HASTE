@@ -126,6 +126,10 @@ public class EnvironmentBuilder
      * @param function
      *     - The function to add.
      * @return This object for chaining.
+     * @throws IllegalArgumentException
+     *     If the function has no inputs and no outputs.
+     * @throws NullPointerException
+     *     If the function returns a null object for inputs or outputs.
      */
     public EnvironmentBuilder addFunction(IFunction function)
     {
@@ -134,6 +138,12 @@ public class EnvironmentBuilder
 
         if (functions.contains(function))
             return this;
+
+        if (function.getInputs() == null || function.getOutputs() == null)
+            throw new NullPointerException("Function inputs and outputs cannot be null!");
+
+        if (function.getInputs().length == 0 && function.getOutputs().length == 0)
+            throw new IllegalArgumentException("Function must have at least one input or output!");
 
         functions.add(function);
 
