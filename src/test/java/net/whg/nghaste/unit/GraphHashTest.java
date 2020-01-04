@@ -36,4 +36,25 @@ public class GraphHashTest
         assertNotEquals(hash1, hash2);
         assertNotEquals(hash1.hashCode(), hash2.hashCode());
     }
+
+    @Test
+    public void notEquals_differentObject()
+    {
+        GraphHash hash = new GraphHash(new byte[] {3, 66, 12, 6});
+        assertNotEquals(hash, new Object());
+    }
+
+    @Test
+    public void equals_sameObject()
+    {
+        GraphHash hash = new GraphHash(new byte[] {3, 66, 12, 6});
+        assertEquals(hash, hash);
+    }
+
+    @Test
+    public void validateString()
+    {
+        GraphHash hash = new GraphHash(new byte[] {1, 2, 3, 4, 5});
+        assertEquals("[1, 2, 3, 4, 5]", hash.toString());
+    }
 }
