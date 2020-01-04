@@ -54,12 +54,6 @@ public final class SingleInstanceAxiom implements IAxiom
     }
 
     @Override
-    public int hashCode()
-    {
-        return dataType.hashCode() + 2349082;
-    }
-
-    @Override
     public boolean equals(Object obj)
     {
         if (this == obj)
@@ -73,5 +67,11 @@ public final class SingleInstanceAxiom implements IAxiom
 
         SingleInstanceAxiom other = (SingleInstanceAxiom) obj;
         return dataType.equals(other.dataType);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return dataType.hashCode() + 2349082;
     }
 }
