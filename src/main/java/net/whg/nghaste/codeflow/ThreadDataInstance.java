@@ -7,9 +7,9 @@ public class ThreadDataInstance implements IDataInstance
 {
     private final ThreadDataType dataType;
 
-    public ThreadDataInstance(ThreadDataType dataType)
+    public ThreadDataInstance()
     {
-        this.dataType = dataType;
+        this.dataType = new ThreadDataType();
     }
 
     @Override

@@ -50,6 +50,6 @@ public final class BeginThreadFunction extends InputFunction
     @Override
     public IDataInstance[] execute(IDataInstance[] inputs)
     {
-        return new IDataInstance[] {new ThreadDataInstance((ThreadDataType) getInputs()[0])};
+        return new IDataInstance[] {new ThreadDataInstance()};
     }
 }
