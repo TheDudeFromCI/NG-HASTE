@@ -8,7 +8,6 @@ import org.junit.Test;
 import net.whg.nghaste.NodeGraph;
 import net.whg.nghaste.util.EnvironmentUtils;
 import net.whg.nghaste.util.SingleConstAxiom;
-import net.whg.nghaste.util.SingleInstanceAxiom;
 
 public class SingleConstAxiomTest
 {
