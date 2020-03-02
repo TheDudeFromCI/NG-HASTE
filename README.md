@@ -37,4 +37,4 @@ to your pom.xml file in the dependencies, replacing VERSION with the version of 
 If you want to install the jar file directly, you can find the pre-compiled releases within the release tab of this project. Simply download the jar file and add them to your build path. The releases are also tagged with commit links if you wish to manually compile a release.
 
 ## Contributing
-I would highly appreciate any and all contributions to this project. This project is being developed as a weekend hobby project and I don't have much free time to devote to developing it. All contributions are massive helps for allowing this project to reach its full potention. If you're not sure where to begin, the best place to start is by browsing the issues tab for user suggested enhancements or simply general bug fixes. Larger goals for NG-HASTE are discussed in the projects tab.
+I would highly appreciate any and all contributions to this project. This project is being developed as a weekend hobby project and I don't have much free time to devote to developing it. All contributions are massive helps for allowing this project to reach its full potention.
