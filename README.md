@@ -6,12 +6,19 @@
 
 ---
 
+
 # NG-HASTE
+
 NG-HASTE, standing for "Node Graph - Heuristic Axiom Search Tree Extraction", is an algorithm designed for the purpose of runtime code generation. The principle for this concept is to solve logical problems through various analytical means to generate solutions for "black-box" environments. At it's core, NG-HASTE is a search tree which attempts to solve problems by digging through a search tree of all possible solutions and then using various approachs of heuristic guesses and logical conclusions to prune the search tree down to a more reasonable size.
 
-When working with NG-HASTE, the purpose of this algorithm is designed specifically for writing code or code-like solutions to problems, rather than solving problems directly. An example of this would be asking the algorithm to solve a Rubiks Cube. Instead of solving the cube directly, the algorithm is designed for writing a new algorithm which is capable of solving the Rubiks Cube. The algorithm also uses slight machine learning technques to solve future problems faster based on the observations it makes while solving problems.
+The algorithm also keeps a local database which it uses to store it's current progress with all problems it is working through, as well as keeping a record of how certain data types and functions can be used in order to solve future problems faster. 
 
-As the search space is essentially "brute forced" rather than aproximated, a solution is garenteed to be found eventually, provided the solution exists within the search space. Here, the goal is designed specifically for optimizating the number of steps required to find the solution. The list of approaches used to narrow this search space is far too long to go over in this short read-me file. Head over to the wiki for an extensive break down of all steps and approaches used, as well as best practices for providing an environment for NG-HASTE to operate within.
+When working with NG-HASTE, the purpose of this algorithm is designed specifically for generating algorithms to solve problems, rather than solving problems directly. An example of this would be working with a Rubiks Cube. Instead of solving the cube directly, the algorithm is designed for writing a new algorithm which is capable of solving the Rubiks Cube.
+
+As the search space is essentially "brute forced" rather than aproximated, a solution is garenteed to be found eventually, provided a solution exists. This project aims to optimize the search techniques and reduce the number of steps required to find a solution. Some of these optimizations include:
+* Tracking the range of values of data types as they pass through a solution in order to prune children which produce poor results.
+* Keeping record of inputs can be provided to functions to produce what outputs, allowing shortcuts to be taken.
+* Allowing using probability when working with data type ranges for better heuristics.
 
 ## Getting Started
 
