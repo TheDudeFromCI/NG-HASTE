@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import net.whg.nghaste.Environment;
+import net.whg.nghaste.EnvironmentBuilder;
+import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
+import net.whg.nghaste.InputFunction;
 import net.whg.nghaste.NodeContainer;
 import net.whg.nghaste.NodeGraph;
 import net.whg.nghaste.SearchTree;
@@ -140,5 +143,43 @@ public class SearchTreeTest
         for (int i = 0; i < solCount; i++)
             assertEquals(0, container.getSolution(i)
                                      .countOpenPlugs());
+    }
+
+    @Test
+    public void differentDataTypes_canConnect()
+    {
+        EnvironmentBuilder builder = new EnvironmentBuilder().setMaxDepth(1);
+        builder.addFunction(EnvironmentUtils.FUNC0_NUM_OUT);
+        builder.addFunction(new InputFunction(new IDataType[] {new IDataType()
+        {
+            @Override
+            public boolean canConnectTo(IDataType dataType)
+            {
+                return true;
+            }
+        }})
+        {
+            @Override
+            public IDataInstance[] execute(IDataInstance[] inputs)
+            {
+                return null;
+            }
+        });
+
+        Environment env = builder.build();
+
+        NodeContainer container = new NodeContainer();
+        SearchTree tree = new SearchTree(container);
+
+        tree.placeNeighbors(NodeGraph.newGraph(env, 0));
+
+        assertEquals(0, container.size());
+        assertEquals(1, container.getSolutionCount());
+
+        NodeGraph g = container.getSolution(0);
+        assertEquals(2, g.getNodeCount());
+        assertEquals(1, g.getConnectionCount());
+        assertEquals(0, g.getNodeType(0));
+        assertEquals(1, g.getNodeType(1));
     }
 }

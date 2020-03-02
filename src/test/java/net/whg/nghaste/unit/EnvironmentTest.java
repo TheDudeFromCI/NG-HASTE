@@ -15,7 +15,13 @@ public class EnvironmentTest
     private IDataType dataType()
     {
         return new IDataType()
-        {};
+        {
+            @Override
+            public boolean canConnectTo(IDataType dataType)
+            {
+                return dataType == this;
+            }
+        };
     }
 
     private IFunction outputFunction()

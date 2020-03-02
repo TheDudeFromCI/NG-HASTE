@@ -108,7 +108,7 @@ public class SearchTree
             int parentOutputCount = parentOutputs.length;
             for (int parentOutputIndex = 0; parentOutputIndex < parentOutputCount; parentOutputIndex++)
             {
-                if (!parentOutputs[parentOutputIndex].equals(nodeInputs[inputPlugIndex]))
+                if (!parentOutputs[parentOutputIndex].canConnectTo(nodeInputs[inputPlugIndex]))
                     continue;
 
                 processGraph(graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex));
@@ -145,7 +145,7 @@ public class SearchTree
             int functionOutputCount = functionOutputs.length;
             for (int functionOutputIndex = 0; functionOutputIndex < functionOutputCount; functionOutputIndex++)
             {
-                if (!functionOutputs[functionOutputIndex].equals(nodeInputs[inputPlugIndex]))
+                if (!functionOutputs[functionOutputIndex].canConnectTo(nodeInputs[inputPlugIndex]))
                     continue;
 
                 processGraph(graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex));

@@ -38,7 +38,13 @@ public class EnvironmentUtils
     private static IDataType data()
     {
         return new IDataType()
-        {};
+        {
+            @Override
+            public boolean canConnectTo(IDataType dataType)
+            {
+                return dataType == this;
+            }
+        };
     }
 
     private static IFunction func(IDataType[] inputs, IDataType[] outputs)
