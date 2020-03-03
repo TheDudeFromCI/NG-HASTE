@@ -81,6 +81,13 @@ public class DuplicateFinder
                 p += out;
         }
 
+        {
+            int t = 1;
+            for (int i = p; i >= 1; i--)
+                t *= i;
+            p = t;
+        }
+
         return p - 1;
     }
 
