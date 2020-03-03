@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import java.util.List;
+
 /**
  * The search tree class is a simple class which serves the purpose of building
  * the search tree for the NG-HASTE algorithm by finding the available children
@@ -97,6 +99,7 @@ public class SearchTree
         IDataType[] nodeInputs = nodeType.getInputs();
         int nodeCount = graph.getNodeCount();
 
+        int openPlugs = graph.countOpenPlugs() - 1;
         for (int parentNodeIndex = 0; parentNodeIndex < nodeCount; parentNodeIndex++)
         {
             if (isParentOf(graph, nodeIndex, parentNodeIndex))
@@ -111,7 +114,8 @@ public class SearchTree
                 if (!parentOutputs[parentOutputIndex].canConnectTo(nodeInputs[inputPlugIndex]))
                     continue;
 
-                processGraph(graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex));
+                processGraph(graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex),
+                        openPlugs == 0);
             }
         }
     }
@@ -130,25 +134,33 @@ public class SearchTree
      */
     private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex)
     {
+        Environment env = graph.getEnvironment();
+        List<IFunction> functions = env.getFunctions();
+
         IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
         IDataType[] nodeInputs = nodeType.getInputs();
 
-        int functionCount = graph.getEnvironment()
-                                 .getFunctions()
-                                 .size();
+        int connectionCount = graph.getConnectionCount() + 1;
+        int openPlugs = graph.countOpenPlugs() - 1;
+
+        int functionCount = functions.size();
         for (int functionIndex = 0; functionIndex < functionCount; functionIndex++)
         {
-            IDataType[] functionOutputs = graph.getEnvironment()
-                                               .getFunctions()
-                                               .get(functionIndex)
-                                               .getOutputs();
+            IFunction function = functions.get(functionIndex);
+            IDataType[] functionOutputs = function.getOutputs();
+
+            int newOpen = function.getInputs().length;
+            if (connectionCount + openPlugs + newOpen > env.getMaxDepth())
+                continue;
+
             int functionOutputCount = functionOutputs.length;
             for (int functionOutputIndex = 0; functionOutputIndex < functionOutputCount; functionOutputIndex++)
             {
                 if (!functionOutputs[functionOutputIndex].canConnectTo(nodeInputs[inputPlugIndex]))
                     continue;
 
-                processGraph(graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex));
+                processGraph(graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex),
+                        openPlugs == 0 && newOpen == 0);
             }
         }
     }
@@ -163,20 +175,15 @@ public class SearchTree
      * @param graph
      *     - The child graph to process.
      */
-    private void processGraph(NodeGraph graph)
+    private void processGraph(NodeGraph graph, boolean solution)
     {
-        int connectionCount = graph.getConnectionCount();
-        int openPlugs = graph.countOpenPlugs();
-        if (connectionCount + openPlugs > graph.getEnvironment()
-                                               .getMaxDepth())
-            return;
 
         for (IAxiom axiom : graph.getEnvironment()
                                  .getAxioms())
             if (!axiom.isValid(graph))
                 return;
 
-        if (openPlugs == 0)
+        if (solution)
         {
             for (ISolutionAxiom axiom : graph.getEnvironment()
                                              .getSolutionAxioms())
