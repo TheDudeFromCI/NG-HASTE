@@ -1,6 +1,11 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.List;
+import net.whg.nghaste.IAxiom;
+import net.whg.nghaste.IDataType;
+import net.whg.nghaste.IFunction;
+import net.whg.nghaste.IHeuristic;
+import net.whg.nghaste.ISolutionAxiom;
 
 /**
  * The search tree class is a simple class which serves the purpose of building
@@ -12,18 +17,6 @@ import java.util.List;
 public class SearchTree
 {
     private final Connection connectionBuf = new Connection();
-    private final NodeContainer container;
-
-    /**
-     * Creates a new search tree object.
-     * 
-     * @param container
-     *     - The container to store new graphs to.
-     */
-    public SearchTree(NodeContainer container)
-    {
-        this.container = container;
-    }
 
     /**
      * This method preforms a single iteration on the graph, by processing the graph
@@ -34,7 +27,7 @@ public class SearchTree
      * @param graph
      *     - The graphs to process.
      */
-    public void placeNeighbors(NodeGraph graph)
+    public void placeNeighbors(NodeGraph graph, List<NodeGraph> graphOut, List<NodeGraph> solutionOut)
     {
         int nodeCount = graph.getNodeCount();
         for (int nodeIndex = nodeCount - 1; nodeIndex >= 0; nodeIndex--)
@@ -47,8 +40,8 @@ public class SearchTree
                 if (hasConnection(graph, nodeIndex, inputPlugIndex))
                     continue;
 
-                addNewConnections(graph, nodeIndex, inputPlugIndex);
-                addNewNodes(graph, nodeIndex, inputPlugIndex);
+                addNewConnections(graph, nodeIndex, inputPlugIndex, graphOut, solutionOut);
+                addNewNodes(graph, nodeIndex, inputPlugIndex, graphOut, solutionOut);
                 return;
             }
         }
@@ -93,7 +86,8 @@ public class SearchTree
      * @param inputPlugIndex
      *     - The index of the plug.
      */
-    private void addNewConnections(NodeGraph graph, int nodeIndex, int inputPlugIndex)
+    private void addNewConnections(NodeGraph graph, int nodeIndex, int inputPlugIndex, List<NodeGraph> graphOut,
+            List<NodeGraph> solutionOut)
     {
         IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
         IDataType[] nodeInputs = nodeType.getInputs();
@@ -115,7 +109,7 @@ public class SearchTree
                     continue;
 
                 processGraph(graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex),
-                        openPlugs == 0);
+                        graphOut, solutionOut, openPlugs == 0);
             }
         }
     }
@@ -132,7 +126,8 @@ public class SearchTree
      * @param inputPlugIndex
      *     - The index of the plug.
      */
-    private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex)
+    private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex, List<NodeGraph> graphOut,
+            List<NodeGraph> solutionOut)
     {
         Environment env = graph.getEnvironment();
         List<IFunction> functions = env.getFunctions();
@@ -160,7 +155,7 @@ public class SearchTree
                     continue;
 
                 processGraph(graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex),
-                        openPlugs == 0 && newOpen == 0);
+                        graphOut, solutionOut, openPlugs == 0 && newOpen == 0);
             }
         }
     }
@@ -175,7 +170,7 @@ public class SearchTree
      * @param graph
      *     - The child graph to process.
      */
-    private void processGraph(NodeGraph graph, boolean solution)
+    private void processGraph(NodeGraph graph, List<NodeGraph> graphOut, List<NodeGraph> solutionOut, boolean solution)
     {
 
         for (IAxiom axiom : graph.getEnvironment()
@@ -190,7 +185,7 @@ public class SearchTree
                 if (!axiom.isValid(graph))
                     return;
 
-            container.addSolution(graph);
+            solutionOut.add(graph);
         }
         else
         {
@@ -201,7 +196,7 @@ public class SearchTree
                 heuristic += h.estimateHeuristic(graph);
 
             graph.setHeuristicScore(heuristic);
-            container.addNodeGraph(graph);
+            graphOut.add(graph);
         }
     }
 

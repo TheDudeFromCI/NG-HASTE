@@ -1,8 +1,8 @@
 package net.whg.nghaste.util;
 
 import net.whg.nghaste.IAxiom;
-import net.whg.nghaste.InputFunction;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.InputFunction;
+import net.whg.nghaste.impl.NodeGraph;
 
 /**
  * This axiom is used to ensure that only at most a single instance of each

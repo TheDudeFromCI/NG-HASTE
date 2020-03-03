@@ -1,7 +1,13 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.nghaste.IAxiom;
+import net.whg.nghaste.IDataType;
+import net.whg.nghaste.IFunction;
+import net.whg.nghaste.IHeuristic;
+import net.whg.nghaste.IRuleHolder;
+import net.whg.nghaste.ISolutionAxiom;
 
 /**
  * This class is used to build an environment object with the given settings. As

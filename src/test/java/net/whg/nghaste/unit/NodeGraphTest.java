@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.junit.Test;
-import net.whg.nghaste.Connection;
-import net.whg.nghaste.Environment;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.Connection;
+import net.whg.nghaste.impl.Environment;
+import net.whg.nghaste.impl.NodeGraph;
 import net.whg.nghaste.util.EnvironmentUtils;
 
 public class NodeGraphTest

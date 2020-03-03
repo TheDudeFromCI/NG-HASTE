@@ -1,4 +1,7 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
+
+import net.whg.nghaste.IDataType;
+import net.whg.nghaste.IFunction;
 
 /**
  * An output function is a special type of function which takes only inputs and

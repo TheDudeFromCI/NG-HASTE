@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import net.whg.nghaste.Environment;
-import net.whg.nghaste.NodeContainer;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.Environment;
+import net.whg.nghaste.impl.NodeContainer;
+import net.whg.nghaste.impl.NodeGraph;
 import net.whg.nghaste.util.EnvironmentUtils;
 
 public class NodeContainerTest

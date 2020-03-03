@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.NodeGraph;
 import net.whg.nghaste.util.EnvironmentUtils;
 import net.whg.nghaste.util.SingleConstAxiom;
 

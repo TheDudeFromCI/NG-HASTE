@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import net.whg.nghaste.impl.NodeGraph;
+
 /**
  * An axiom is a validator rule for confirming whether a graph is considered
  * fully valid or not. This rule is applied to the search tree and tested for

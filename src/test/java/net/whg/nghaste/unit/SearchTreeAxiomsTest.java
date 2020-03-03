@@ -3,12 +3,14 @@ package net.whg.nghaste.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
-import net.whg.nghaste.Environment;
 import net.whg.nghaste.IFunction;
-import net.whg.nghaste.NodeContainer;
-import net.whg.nghaste.NodeGraph;
-import net.whg.nghaste.SearchTree;
+import net.whg.nghaste.impl.Environment;
+import net.whg.nghaste.impl.NodeContainer;
+import net.whg.nghaste.impl.NodeGraph;
+import net.whg.nghaste.impl.SearchTree;
 import net.whg.nghaste.util.EnvironmentUtils;
 
 public class SearchTreeAxiomsTest
@@ -41,38 +43,29 @@ public class SearchTreeAxiomsTest
         }));
 
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(container);
+        SearchTree tree = new SearchTree();
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
+
+        List<NodeGraph> graphs = new ArrayList<>();
+        List<NodeGraph> solutions = new ArrayList<>();
 
         int graphCount = 0;
         while (container.size() > 0)
         {
             graphCount++;
             NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(g);
+            tree.placeNeighbors(g, graphs, solutions);
+
+            for (NodeGraph g1 : graphs)
+                container.addNodeGraph(g1);
+            graphs.clear();
+
+            for (NodeGraph g1 : solutions)
+                container.addSolution(g1);
+            solutions.clear();
         }
 
         assertEquals(676, graphCount);
-    }
-
-    @Test
-    public void allGraphs_5deep_controlTest()
-    {
-        Environment env = EnvironmentUtils.quickEnvironment(5);
-        NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(container);
-        container.addNodeGraph(NodeGraph.newGraph(env, 0));
-
-        int graphCount = 0;
-        while (container.size() > 0)
-        {
-            graphCount++;
-            NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(g);
-        }
-
-        assertEquals(678, graphCount);
-        assertEquals(877, container.getSolutionCount());
     }
 
     @Test
@@ -98,15 +91,26 @@ public class SearchTreeAxiomsTest
             });
         });
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(container);
+        SearchTree tree = new SearchTree();
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
+
+        List<NodeGraph> graphs = new ArrayList<>();
+        List<NodeGraph> solutions = new ArrayList<>();
 
         int graphCount = 0;
         while (container.size() > 0)
         {
             graphCount++;
             NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(g);
+            tree.placeNeighbors(g, graphs, solutions);
+
+            for (NodeGraph g1 : graphs)
+                container.addNodeGraph(g1);
+            graphs.clear();
+
+            for (NodeGraph g1 : solutions)
+                container.addSolution(g1);
+            solutions.clear();
         }
 
         assertEquals(678, graphCount);
@@ -120,10 +124,13 @@ public class SearchTreeAxiomsTest
         { builder.addHeuristic(graph -> -graph.getConnectionCount()); });
 
         NodeContainer container = new NodeContainer();
-        SearchTree tree = new SearchTree(container);
+        SearchTree tree = new SearchTree();
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
 
         int connectionLast = 0;
+
+        List<NodeGraph> graphs = new ArrayList<>();
+        List<NodeGraph> solutions = new ArrayList<>();
 
         int graphCount = 0;
         while (container.size() > 0)
@@ -135,7 +142,15 @@ public class SearchTreeAxiomsTest
             assertTrue(con >= connectionLast);
             connectionLast = con;
 
-            tree.placeNeighbors(g);
+            tree.placeNeighbors(g, graphs, solutions);
+
+            for (NodeGraph g1 : graphs)
+                container.addNodeGraph(g1);
+            graphs.clear();
+
+            for (NodeGraph g1 : solutions)
+                container.addSolution(g1);
+            solutions.clear();
         }
 
         assertNotEquals(0, connectionLast);

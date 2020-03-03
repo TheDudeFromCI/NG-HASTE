@@ -1,8 +1,12 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.whg.nghaste.IAxiom;
+import net.whg.nghaste.IFunction;
+import net.whg.nghaste.IHeuristic;
+import net.whg.nghaste.ISolutionAxiom;
 
 /**
  * The environment is the container for storing all information about what the

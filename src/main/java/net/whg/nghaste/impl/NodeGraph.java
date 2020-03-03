@@ -1,6 +1,7 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.Arrays;
+import net.whg.nghaste.IFunction;
 
 /**
  * A NodeGraph is a collection of nodes, each containing a set of inputs and

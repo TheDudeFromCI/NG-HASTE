@@ -2,13 +2,13 @@ package net.whg.nghaste.unit;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import net.whg.nghaste.Environment;
-import net.whg.nghaste.EnvironmentBuilder;
 import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
-import net.whg.nghaste.InputFunction;
-import net.whg.nghaste.OutputFunction;
+import net.whg.nghaste.impl.Environment;
+import net.whg.nghaste.impl.EnvironmentBuilder;
+import net.whg.nghaste.impl.InputFunction;
+import net.whg.nghaste.impl.OutputFunction;
 
 public class EnvironmentTest
 {

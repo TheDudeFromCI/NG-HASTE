@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import net.whg.nghaste.impl.NodeGraph;
+
 /**
  * A heuristic, in this context, is used to decide how likely a given node graph
  * is to contain a child graph with a valid solution. This function is applied

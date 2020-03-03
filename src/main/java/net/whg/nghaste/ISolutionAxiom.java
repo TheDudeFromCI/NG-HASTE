@@ -1,5 +1,7 @@
 package net.whg.nghaste;
 
+import net.whg.nghaste.impl.NodeGraph;
+
 /**
  * A solution axiom is a validator rule for confirming whether a graph is
  * considered fully valid solution or not. This rule is applied to the search

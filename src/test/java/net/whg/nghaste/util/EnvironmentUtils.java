@@ -3,13 +3,13 @@ package net.whg.nghaste.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import net.whg.nghaste.Environment;
-import net.whg.nghaste.EnvironmentBuilder;
 import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
-import net.whg.nghaste.InputFunction;
-import net.whg.nghaste.OutputFunction;
+import net.whg.nghaste.impl.Environment;
+import net.whg.nghaste.impl.EnvironmentBuilder;
+import net.whg.nghaste.impl.InputFunction;
+import net.whg.nghaste.impl.OutputFunction;
 
 public class EnvironmentUtils
 {

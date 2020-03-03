@@ -1,4 +1,4 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,7 +142,7 @@ public class NodeContainer
      * @param solution
      *     - The solution to add.
      */
-    void addSolution(NodeGraph solution)
+    public void addSolution(NodeGraph solution)
     {
         solutions.add(solution);
     }

@@ -1,4 +1,4 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 import java.util.ArrayList;
 import java.util.List;

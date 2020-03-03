@@ -2,7 +2,7 @@ package net.whg.nghaste.util;
 
 import net.whg.nghaste.IAxiom;
 import net.whg.nghaste.IDataType;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.NodeGraph;
 
 /**
  * This axiom is wrapped around a specific data type to ensure that an output

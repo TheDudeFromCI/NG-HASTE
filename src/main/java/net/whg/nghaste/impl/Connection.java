@@ -1,4 +1,4 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
 /**
  * A connection is a pointer for how information should be moved around within a

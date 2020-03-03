@@ -1,5 +1,7 @@
-package net.whg.nghaste;
+package net.whg.nghaste.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,9 @@ class Worker extends Thread
     @Override
     public void run()
     {
-        SearchTree searchTree = new SearchTree(container);
+        List<NodeGraph> graphs = new ArrayList<>();
+        List<NodeGraph> solutions = new ArrayList<>();
+        SearchTree searchTree = new SearchTree();
 
         while (running)
         {
@@ -75,8 +79,16 @@ class Worker extends Thread
                 continue;
             }
 
-            searchTree.placeNeighbors(graph);
+            searchTree.placeNeighbors(graph, graphs, solutions);
             container.finishGraph();
+
+            for (NodeGraph g : graphs)
+                container.addNodeGraph(g);
+            graphs.clear();
+
+            for (NodeGraph g : solutions)
+                container.addSolution(g);
+            solutions.clear();
         }
     }
 }

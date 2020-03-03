@@ -2,7 +2,7 @@ package net.whg.nghaste.util;
 
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.ISolutionAxiom;
-import net.whg.nghaste.NodeGraph;
+import net.whg.nghaste.impl.NodeGraph;
 
 /**
  * This is a solution axiom is used to ensure that no instances of a data type

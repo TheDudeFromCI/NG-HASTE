@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.Random;
 import org.junit.Test;
-import net.whg.nghaste.Connection;
+import net.whg.nghaste.impl.Connection;
 
 public class ConnectionTest
 {

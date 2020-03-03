@@ -3,7 +3,7 @@ package net.whg.nghaste.unit;
 import org.junit.Test;
 import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
-import net.whg.nghaste.InputFunction;
+import net.whg.nghaste.impl.InputFunction;
 
 public class InputFunctionTest
 {
