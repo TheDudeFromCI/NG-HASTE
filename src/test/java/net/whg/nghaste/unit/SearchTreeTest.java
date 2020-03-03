@@ -57,7 +57,7 @@ public class SearchTreeTest
         for (int i = 0; i < 7; i++)
             tree.placeNeighbors(outputs.get(i));
 
-        assertEquals(43, container.size());
+        assertEquals(35, container.size());
     }
 
     @Test

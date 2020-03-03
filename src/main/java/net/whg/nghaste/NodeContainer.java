@@ -15,7 +15,6 @@ public class NodeContainer
 {
     private final PriorityBlockingQueue<NodeGraph> queue = new PriorityBlockingQueue<>();
     private final List<NodeGraph> solutions = Collections.synchronizedList(new ArrayList<>());
-    private final DuplicateFinder duplicateFinder = new DuplicateFinder();
     private final AtomicInteger totalGraphs = new AtomicInteger(0);
     private final AtomicInteger unprocessedGraphs = new AtomicInteger(0);
 
@@ -159,19 +158,6 @@ public class NodeContainer
     public int getTotalGraphsSearched()
     {
         return totalGraphs.get();
-    }
-
-    /**
-     * Gets the duplicate finder object assosicated with this node container. The
-     * state of the duplicate finder is paired with the state of the node container,
-     * saving an internal state which is updated as further graphs are searched
-     * within the tree.
-     * 
-     * @return The duplicate finder.
-     */
-    public DuplicateFinder getDuplicateFinder()
-    {
-        return duplicateFinder;
     }
 
     /**

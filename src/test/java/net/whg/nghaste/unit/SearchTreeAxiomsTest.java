@@ -52,7 +52,7 @@ public class SearchTreeAxiomsTest
             tree.placeNeighbors(g);
         }
 
-        assertEquals(1084, graphCount);
+        assertEquals(676, graphCount);
     }
 
     @Test
@@ -71,8 +71,8 @@ public class SearchTreeAxiomsTest
             tree.placeNeighbors(g);
         }
 
-        assertEquals(1090, graphCount);
-        assertEquals(798, container.getSolutionCount());
+        assertEquals(678, graphCount);
+        assertEquals(877, container.getSolutionCount());
     }
 
     @Test
@@ -109,8 +109,8 @@ public class SearchTreeAxiomsTest
             tree.placeNeighbors(g);
         }
 
-        assertEquals(1090, graphCount);
-        assertEquals(595, container.getSolutionCount());
+        assertEquals(678, graphCount);
+        assertEquals(667, container.getSolutionCount());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class SearchTreeAxiomsTest
 
         assertNotEquals(0, connectionLast);
 
-        assertEquals(1090, graphCount);
-        assertEquals(798, container.getSolutionCount());
+        assertEquals(678, graphCount);
+        assertEquals(877, container.getSolutionCount());
     }
 }

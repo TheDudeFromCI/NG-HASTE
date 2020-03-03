@@ -10,7 +10,6 @@ package net.whg.nghaste;
 public class SearchTree
 {
     private final Connection connectionBuf = new Connection();
-    private final GraphHasher hasher = new GraphHasher();
     private final NodeContainer container;
 
     /**
@@ -36,7 +35,7 @@ public class SearchTree
     public void placeNeighbors(NodeGraph graph)
     {
         int nodeCount = graph.getNodeCount();
-        for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
+        for (int nodeIndex = nodeCount - 1; nodeIndex >= 0; nodeIndex--)
         {
             IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
             int inputPlugs = nodeType.getInputs().length;
@@ -48,6 +47,7 @@ public class SearchTree
 
                 addNewConnections(graph, nodeIndex, inputPlugIndex);
                 addNewNodes(graph, nodeIndex, inputPlugIndex);
+                return;
             }
         }
     }
@@ -169,10 +169,6 @@ public class SearchTree
         int openPlugs = graph.countOpenPlugs();
         if (connectionCount + openPlugs > graph.getEnvironment()
                                                .getMaxDepth())
-            return;
-
-        if (!container.getDuplicateFinder()
-                      .isUnquie(hasher, graph))
             return;
 
         for (IAxiom axiom : graph.getEnvironment()
