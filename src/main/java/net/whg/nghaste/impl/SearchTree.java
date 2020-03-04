@@ -1,5 +1,6 @@
 package net.whg.nghaste.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import net.whg.nghaste.IAxiom;
 import net.whg.nghaste.IDataType;
@@ -17,6 +18,8 @@ import net.whg.nghaste.ISolutionAxiom;
 public class SearchTree
 {
     private final Connection connectionBuf = new Connection();
+    private List<NodeGraph> graphOut = new ArrayList<>();
+    private List<NodeGraph> solutionOut = new ArrayList<>();
 
     /**
      * This method preforms a single iteration on the graph, by processing the graph
@@ -27,7 +30,7 @@ public class SearchTree
      * @param graph
      *     - The graphs to process.
      */
-    public void placeNeighbors(NodeGraph graph, List<NodeGraph> graphOut, List<NodeGraph> solutionOut)
+    public void placeNeighbors(NodeGraph graph)
     {
         int nodeCount = graph.getNodeCount();
         for (int nodeIndex = nodeCount - 1; nodeIndex >= 0; nodeIndex--)
@@ -40,8 +43,8 @@ public class SearchTree
                 if (hasConnection(graph, nodeIndex, inputPlugIndex))
                     continue;
 
-                addNewConnections(graph, nodeIndex, inputPlugIndex, graphOut, solutionOut);
-                addNewNodes(graph, nodeIndex, inputPlugIndex, graphOut, solutionOut);
+                addNewConnections(graph, nodeIndex, inputPlugIndex);
+                addNewNodes(graph, nodeIndex, inputPlugIndex);
                 return;
             }
         }
@@ -86,8 +89,7 @@ public class SearchTree
      * @param inputPlugIndex
      *     - The index of the plug.
      */
-    private void addNewConnections(NodeGraph graph, int nodeIndex, int inputPlugIndex, List<NodeGraph> graphOut,
-            List<NodeGraph> solutionOut)
+    private void addNewConnections(NodeGraph graph, int nodeIndex, int inputPlugIndex)
     {
         IFunction nodeType = graph.getNodeAsFunction(nodeIndex);
         IDataType[] nodeInputs = nodeType.getInputs();
@@ -109,7 +111,7 @@ public class SearchTree
                     continue;
 
                 processGraph(graph.addConnection(parentNodeIndex, parentOutputIndex, nodeIndex, inputPlugIndex),
-                        graphOut, solutionOut, openPlugs == 0);
+                        openPlugs == 0);
             }
         }
     }
@@ -126,8 +128,7 @@ public class SearchTree
      * @param inputPlugIndex
      *     - The index of the plug.
      */
-    private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex, List<NodeGraph> graphOut,
-            List<NodeGraph> solutionOut)
+    private void addNewNodes(NodeGraph graph, int nodeIndex, int inputPlugIndex)
     {
         Environment env = graph.getEnvironment();
         List<IFunction> functions = env.getFunctions();
@@ -155,7 +156,7 @@ public class SearchTree
                     continue;
 
                 processGraph(graph.addConnectionAndNode(functionIndex, functionOutputIndex, nodeIndex, inputPlugIndex),
-                        graphOut, solutionOut, openPlugs == 0 && newOpen == 0);
+                        openPlugs == 0 && newOpen == 0);
             }
         }
     }
@@ -170,7 +171,7 @@ public class SearchTree
      * @param graph
      *     - The child graph to process.
      */
-    private void processGraph(NodeGraph graph, List<NodeGraph> graphOut, List<NodeGraph> solutionOut, boolean solution)
+    private void processGraph(NodeGraph graph, boolean solution)
     {
 
         for (IAxiom axiom : graph.getEnvironment()
@@ -230,5 +231,28 @@ public class SearchTree
         }
 
         return false;
+    }
+
+    /**
+     * Gets a reference to the list of graphs which have been generated from this
+     * search tree. This list does not include solutions.
+     * 
+     * @return A list of output nodes.
+     * @see #getSolutions()
+     */
+    public List<NodeGraph> getOutputGraphs()
+    {
+        return graphOut;
+    }
+
+    /**
+     * Gets a reference to the list of solutions which have been generated from this
+     * search tree.
+     * 
+     * @return A list of solutions.
+     */
+    public List<NodeGraph> getSolutions()
+    {
+        return solutionOut;
     }
 }

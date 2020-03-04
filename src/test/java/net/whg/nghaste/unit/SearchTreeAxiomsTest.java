@@ -3,7 +3,6 @@ package net.whg.nghaste.unit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import net.whg.nghaste.IFunction;
@@ -46,15 +45,15 @@ public class SearchTreeAxiomsTest
         SearchTree tree = new SearchTree();
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
 
-        List<NodeGraph> graphs = new ArrayList<>();
-        List<NodeGraph> solutions = new ArrayList<>();
+        List<NodeGraph> graphs = tree.getOutputGraphs();
+        List<NodeGraph> solutions = tree.getSolutions();
 
         int graphCount = 0;
         while (container.size() > 0)
         {
             graphCount++;
             NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(g, graphs, solutions);
+            tree.placeNeighbors(g);
 
             for (NodeGraph g1 : graphs)
                 container.addNodeGraph(g1);
@@ -94,15 +93,15 @@ public class SearchTreeAxiomsTest
         SearchTree tree = new SearchTree();
         container.addNodeGraph(NodeGraph.newGraph(env, 0));
 
-        List<NodeGraph> graphs = new ArrayList<>();
-        List<NodeGraph> solutions = new ArrayList<>();
+        List<NodeGraph> graphs = tree.getOutputGraphs();
+        List<NodeGraph> solutions = tree.getSolutions();
 
         int graphCount = 0;
         while (container.size() > 0)
         {
             graphCount++;
             NodeGraph g = container.getNodeGraph();
-            tree.placeNeighbors(g, graphs, solutions);
+            tree.placeNeighbors(g);
 
             for (NodeGraph g1 : graphs)
                 container.addNodeGraph(g1);
@@ -129,8 +128,8 @@ public class SearchTreeAxiomsTest
 
         int connectionLast = 0;
 
-        List<NodeGraph> graphs = new ArrayList<>();
-        List<NodeGraph> solutions = new ArrayList<>();
+        List<NodeGraph> graphs = tree.getOutputGraphs();
+        List<NodeGraph> solutions = tree.getSolutions();
 
         int graphCount = 0;
         while (container.size() > 0)
@@ -142,7 +141,7 @@ public class SearchTreeAxiomsTest
             assertTrue(con >= connectionLast);
             connectionLast = con;
 
-            tree.placeNeighbors(g, graphs, solutions);
+            tree.placeNeighbors(g);
 
             for (NodeGraph g1 : graphs)
                 container.addNodeGraph(g1);
