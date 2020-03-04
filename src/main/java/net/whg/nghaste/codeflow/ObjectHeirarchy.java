@@ -1,4 +1,4 @@
-package net.whg.nghaste.datatypes;
+package net.whg.nghaste.codeflow;
 
 import java.util.ArrayList;
 import java.util.List;
