@@ -64,6 +64,28 @@ public class ObjectHeirarchy
         {
             return String.format("DataObj(%s)", name);
         }
+
+        /**
+         * Gets the number of parent types this object has.
+         * 
+         * @return The number of direct parent types.
+         */
+        public int getParentCount()
+        {
+            return parents.length;
+        }
+
+        /**
+         * Gets the parent of this object type at the specified index.
+         * 
+         * @param index
+         *     - The index of the parent to get.
+         * @return The direct parent of this object at the given index.
+         */
+        public DataObj getParent(int index)
+        {
+            return parents[index];
+        }
     }
 
     private final List<DataObj> objects = new ArrayList<>();
