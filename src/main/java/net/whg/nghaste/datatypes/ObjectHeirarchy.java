@@ -2,18 +2,13 @@ package net.whg.nghaste.datatypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
-import net.whg.nghaste.IFunction;
 
 /**
  * This class is a utility class which allows new data types to be created
  * dynamically by a name without worrying about creating a new class for each.
  * Data types created through this class have support for heirarchies, allowing
- * them to automatically be casted up and down in the output function.
- * <p>
- * Note: To enable casting down, the down cast functions must be added to the
- * environment before running it. See {@link #createDownCasts()}
+ * them to automatically be casted up.
  */
 public class ObjectHeirarchy
 {
@@ -71,41 +66,6 @@ public class ObjectHeirarchy
         }
     }
 
-    /**
-     * This function is a simple pass-through function which allows once data type
-     * to be casted to another data type.
-     */
-    public static class DowncastDataTypeFunction implements IFunction
-    {
-        private final IDataType[] input;
-        private final IDataType[] output;
-
-        private DowncastDataTypeFunction(IDataType input, IDataType output)
-        {
-            this.input = new IDataType[] {input};
-            this.output = new IDataType[] {output};
-        }
-
-        @Override
-        public IDataType[] getInputs()
-        {
-            return input;
-        }
-
-        @Override
-        public IDataType[] getOutputs()
-        {
-            return output;
-        }
-
-        @Override
-        public IDataInstance[] execute(IDataInstance[] inputs)
-        {
-            return inputs;
-        }
-
-    }
-
     private final List<DataObj> objects = new ArrayList<>();
 
     /**
@@ -150,23 +110,6 @@ public class ObjectHeirarchy
         objects.add(dataObj);
 
         return dataObj;
-    }
-
-    /**
-     * Generates a list of all downcast functions, and logical axioms for objects in
-     * this list.
-     * 
-     * @return The list of functions which should be added to the environment.
-     */
-    public List<IFunction> createDownCasts()
-    {
-        List<IFunction> functions = new ArrayList<>();
-
-        for (DataObj obj : objects)
-            for (DataObj parent : obj.parents)
-                functions.add(new DowncastDataTypeFunction(parent, obj));
-
-        return functions;
     }
 
     /**
