@@ -2,7 +2,7 @@ package net.whg.nghaste.unit;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import net.whg.nghaste.IDataInstance;
+import net.whg.nghaste.DataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.impl.Environment;
@@ -30,7 +30,7 @@ public class EnvironmentTest
         return new OutputFunction(new IDataType[] {dataType})
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
@@ -43,7 +43,7 @@ public class EnvironmentTest
         return new InputFunction(new IDataType[] {dataType})
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
@@ -68,7 +68,7 @@ public class EnvironmentTest
             }
 
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }

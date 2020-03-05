@@ -3,7 +3,7 @@ package net.whg.nghaste.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import net.whg.nghaste.IDataInstance;
+import net.whg.nghaste.DataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.impl.Environment;
@@ -64,7 +64,7 @@ public class EnvironmentUtils
             }
 
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
@@ -76,7 +76,7 @@ public class EnvironmentUtils
         return new InputFunction(outputs)
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
@@ -88,7 +88,7 @@ public class EnvironmentUtils
         return new OutputFunction(inputs)
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }

@@ -46,5 +46,5 @@ public interface IFunction extends IRuleHolder
      *     new instance, not the same instance as the inputs. Outputs are value
      *     based, not reference based.
      */
-    IDataInstance[] execute(IDataInstance[] inputs);
+    DataInstance[] execute(DataInstance[] inputs);
 }

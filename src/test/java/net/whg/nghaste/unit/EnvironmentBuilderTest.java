@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.junit.Test;
+import net.whg.nghaste.DataInstance;
 import net.whg.nghaste.IAxiom;
-import net.whg.nghaste.IDataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.IFunction;
 import net.whg.nghaste.IHeuristic;
@@ -51,7 +51,7 @@ public class EnvironmentBuilderTest
         IFunction function = new OutputFunction(new IDataType[] {EnvironmentUtils.DATA_TEXT})
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }

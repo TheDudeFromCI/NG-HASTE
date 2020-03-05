@@ -1,7 +1,7 @@
 package net.whg.nghaste.unit;
 
 import org.junit.Test;
-import net.whg.nghaste.IDataInstance;
+import net.whg.nghaste.DataInstance;
 import net.whg.nghaste.IDataType;
 import net.whg.nghaste.impl.OutputFunction;
 
@@ -13,7 +13,7 @@ public class OutputFunctionTest
         new OutputFunction(null)
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
@@ -26,7 +26,7 @@ public class OutputFunctionTest
         new OutputFunction(new IDataType[0])
         {
             @Override
-            public IDataInstance[] execute(IDataInstance[] inputs)
+            public DataInstance[] execute(DataInstance[] inputs)
             {
                 return null;
             }
