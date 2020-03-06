@@ -9,6 +9,8 @@
 
 # NG-HASTE
 
+**More information can be found on the website at: https://ng-haste.github.io/nghaste-web/**
+
 NG-HASTE, standing for "Node Graph - Heuristic Axiom Search Tree Extraction", is an algorithm designed for the purpose of runtime code generation. The principle for this concept is to solve logical problems through various analytical means to generate solutions for "black-box" environments. At it's core, NG-HASTE is a search tree which attempts to solve problems by digging through a search tree of all possible solutions and then using various approachs of heuristic guesses and logical conclusions to prune the search tree down to a more reasonable size.
 
 The algorithm also keeps a local database which it uses to store it's current progress with all problems it is working through, as well as keeping a record of how certain data types and functions can be used in order to solve future problems faster. 
