@@ -29,10 +29,12 @@ public class ObjectHeirarchy implements Iterable<DataObj>
      */
     public ObjectHeirarchy()
     {
-        addDataType("Object");
+        objects.add(new DataObj("Object", new DataObj[0]));
+
         addDataType("Number");
         addDataType("Boolean");
         addDataType("String");
+
         addDataType("Integer", getObject("Number"));
     }
 

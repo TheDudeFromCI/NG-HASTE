@@ -365,4 +365,32 @@ public class NodeGraph implements Comparable<NodeGraph>
 
         return cons;
     }
+
+    @Override
+    public String toString()
+    {
+        int connCount = getConnectionCount();
+        int nodeCount = getNodeCount();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("NodeGraph: (%d Connections, %d Nodes)", connCount, nodeCount));
+
+        for (int i = 0; i < nodeCount; i++)
+        {
+            sb.append("\n  ")
+              .append(i)
+              .append(") ")
+              .append(getNodeAsFunction(i));
+        }
+
+        Connection conn = new Connection();
+        for (int i = 0; i < connCount; i++)
+        {
+            getConnection(i, conn);
+            sb.append(String.format("\n  - %d:%d => %d:%d", conn.getOutputNode(), conn.getOutputPlug(),
+                    conn.getInputNode(), conn.getInputPlug()));
+        }
+
+        return sb.toString();
+    }
 }
